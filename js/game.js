@@ -107,6 +107,18 @@ class Game {
             if (direction.includes(dir)) {
                 const nextRoom = currentRoom.exits[dir];
                 
+                // Check required items for movement
+                if (currentRoom.requiredItems && currentRoom.requiredItems[dir]) {
+                    const required = currentRoom.requiredItems[dir];
+                    if (!required.every(item => this.gameState.inventory.includes(item))) {
+                        if (currentRoom.deathMessages && currentRoom.deathMessages[dir]) {
+                            this.gameState.gameOver = true;
+                            return currentRoom.deathMessages[dir];
+                        }
+                        return `You need ${required.join(" and ")} to go that way.`;
+                    }
+                }
+
                 // Special case for underground tunnel
                 if (nextRoom === 'undergroundTunnel' && !this.gameState.torchLit) {
                     return "It's too dark to enter without a lit torch.";
@@ -126,21 +138,32 @@ class Game {
 
         const currentRoom = this.rooms[this.gameState.currentRoom];
         
-        // Normalize the input item name (remove spaces and convert to lowercase)
         const normalizedInput = itemName.toLowerCase().replace(/\s+/g, '');
-        
-        // Find the item by comparing normalized versions
         const itemIndex = currentRoom.items.findIndex(item => 
             item.toLowerCase().replace(/\s+/g, '') === normalizedInput
         );
         
         if (itemIndex !== -1) {
-            const actualItemName = currentRoom.items[itemIndex];  // Use the actual cased name
+            const actualItemName = currentRoom.items[itemIndex];
+
+            // Check required items before taking
+            if (currentRoom.requiredItems && currentRoom.requiredItems[actualItemName]) {
+                const required = currentRoom.requiredItems[actualItemName];
+                if (!required.every(item => this.gameState.inventory.includes(item))) {
+                    if (currentRoom.deathMessages && currentRoom.deathMessages[actualItemName]) {
+                        this.gameState.gameOver = true;
+                        return currentRoom.deathMessages[actualItemName];
+                    }
+                    return `You need ${required.join(" and ")} to take that.`;
+                }
+            }
+
             // Special case for cursed items
             if (actualItemName === 'goldenIdol' && !this.gameState.inventory.includes('amulet')) {
                 this.gameState.gameOver = true;
                 return "As you touch the Golden Idol, its curse consumes you. You're dead!";
             }
+
             if (actualItemName === 'cursedTreasure' && !this.gameState.inventory.includes('amulet')) {
                 this.gameState.gameOver = true;
                 return "The cursed treasure drains your life force. You're dead!";
@@ -158,7 +181,7 @@ class Game {
             return "What do you want to use?";
         }
 
-        const currentRoom = this.gameState.currentRoom;
+        const currentRoom = this.rooms[this.gameState.currentRoom];
 
         if (currentRoom === 'trapRoom' && itemName === 'traps') {
             this.gameState.gameOver = true;
@@ -167,6 +190,11 @@ class Game {
 
         if (!this.gameState.inventory.includes(itemName)) {
             return "You don't have that item.";
+        }
+
+        // Check for room-specific item use messages
+        if (currentRoom.itemUse && currentRoom.itemUse[itemName]) {
+            return currentRoom.itemUse[itemName];
         }
 
         switch(itemName) {
