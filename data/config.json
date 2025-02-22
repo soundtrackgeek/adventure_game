@@ -1,0 +1,18 @@
+{
+    "gameName": "Temple Adventure",
+    "welcomeMessage": "Welcome to Temple Adventure!",
+    "helpMessage": "Available commands:\n- go [direction]: Move in a direction (north, south, east, west)\n- take [item]: Pick up an item\n- use [item]: Use an item in your inventory\n- look: Examine your surroundings\n- inventory: Check what you're carrying\n- help: Show this help message",
+    "inventoryEmptyMessage": "Your inventory is empty.",
+    "inventoryContentsPrefix": "You are carrying: ",
+    "invalidCommandMessage": "I don't understand that command. Try 'help' for available commands.",
+    "invalidDirectionMessage": "Which direction do you want to go?",
+    "invalidItemMessage": "What do you want to take?",
+    "cantGoMessage": "You can't go that way.",
+    "noSuchItemMessage": "There's no such item here.",
+    "cantUseMessage": "You can't use that item here.",
+    "dontHaveItemMessage": "You don't have that item.",
+    "gameOverMessage": "Game is over. Refresh the page to start a new game.",
+    "startingRoom": "jungleClearing",
+    "bgMusicVolume": 0.3,
+    "bgMusicVolumeDuringNarration": 0.1
+}

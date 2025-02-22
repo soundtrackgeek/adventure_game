@@ -1,0 +1,70 @@
+{
+    "roomConditions": {
+        "undergroundTunnel": {
+            "enter": {
+                "requires": {
+                    "state": "torchLit",
+                    "value": true,
+                    "message": "It's too dark to enter without a lit torch."
+                }
+            }
+        }
+    },
+    "itemConditions": {
+        "goldenIdol": {
+            "take": {
+                "requires": {
+                    "inventory": "amulet",
+                    "failureMessage": "As you touch the Golden Idol, its curse consumes you. You're dead!",
+                    "gameOver": true
+                }
+            }
+        },
+        "cursedTreasure": {
+            "take": {
+                "requires": {
+                    "inventory": "amulet",
+                    "failureMessage": "The cursed treasure drains your life force. You're dead!",
+                    "gameOver": true
+                }
+            }
+        }
+    },
+    "specialActions": {
+        "trapRoom": {
+            "use": {
+                "traps": {
+                    "message": "You step on a pressure plate. Spikes shoot from the walls. You're dead!",
+                    "gameOver": true
+                }
+            }
+        }
+    },
+    "winConditions": [
+        {
+            "room": "exitPath",
+            "requires": {
+                "inventory": ["goldenIdol", "amulet"]
+            },
+            "message": "Congratulations! You've escaped with the Golden Idol protected by the amulet. You win!"
+        },
+        {
+            "room": "treasureRoom",
+            "requires": {
+                "inventory": ["map", "key"]
+            },
+            "message": "Using the map and key, you discover a secret passage to safety with the treasure. You win!"
+        }
+    ],
+    "deathConditions": [
+        {
+            "room": "undergroundTunnel",
+            "when": {
+                "state": "torchLit",
+                "value": false
+            },
+            "chance": 0.5,
+            "message": "You stumble in the dark and fall into a pit. Game over!"
+        }
+    ]
+}

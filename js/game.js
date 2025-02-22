@@ -2,23 +2,41 @@ class Game {
     constructor(rooms, items) {
         this.rooms = rooms;
         this.items = items;
+        this.config = null;
+        this.rules = null;
         this.gameState = {
-            currentRoom: 'jungleClearing',
+            currentRoom: null,
             inventory: [],
             gameOver: false,
-            torchLit: false,
-            playedSongs: [] // Track played songs
+            state: {} // For custom game states like torchLit
         };
-        
-        // Ensure output element exists and is cleared
-        const output = document.getElementById('output');
-        if (!output) {
-            console.error('Output element not found');
-            return;
+
+        this.loadConfigurations().then(() => {
+            this.gameState.currentRoom = this.config.startingRoom;
+            
+            // Initialize audio elements
+            this.setupAudio();
+            
+            // Show initial room
+            this.displayInitialRoom();
+            this.displayLocationImage();
+        });
+    }
+
+    async loadConfigurations() {
+        try {
+            const [configResponse, rulesResponse] = await Promise.all([
+                fetch('data/config.json'),
+                fetch('data/rules.json')
+            ]);
+            this.config = await configResponse.json();
+            this.rules = await rulesResponse.json();
+        } catch (error) {
+            console.error('Error loading configurations:', error);
         }
-        output.innerHTML = '';
-        
-        // Initialize music system
+    }
+
+    setupAudio() {
         this.songs = [];  // Will be populated when music is initialized
         this.audioElement = document.getElementById('bgMusic');
         this.narrationElement = document.getElementById('narration');
@@ -28,7 +46,7 @@ class Game {
         }
 
         // Set background music volume lower
-        this.audioElement.volume = 0.3;
+        this.audioElement.volume = this.config.bgMusicVolume;
         this.musicInitialized = false;
 
         // Set up audio error handling
@@ -50,10 +68,6 @@ class Game {
                 });
             }
         }, { once: true });
-
-        // Show initial room description
-        this.displayInitialRoom();
-        this.displayLocationImage();
     }
 
     async loadMusicFiles() {
@@ -116,7 +130,7 @@ class Game {
     displayInitialRoom() {
         const currentRoom = this.rooms[this.gameState.currentRoom];
         if (currentRoom) {
-            const initialText = `Welcome to Temple Adventure!\n\n\n${currentRoom.description}\n\n\nAvailable actions: ${currentRoom.choices.join(', ')}\n\nType 'help' for a list of commands.`;
+            const initialText = `${this.config.welcomeMessage}\n\n\n${currentRoom.description}\n\n\nAvailable actions: ${currentRoom.choices.join(', ')}\n\nType 'help' for a list of commands.`;
             this.displayText(initialText);
         } else {
             console.error('Initial room not found:', this.gameState.currentRoom);
@@ -153,7 +167,7 @@ class Game {
 
     processCommand() {
         if (this.gameState.gameOver) {
-            this.displayText("Game is over. Refresh the page to start a new game.");
+            this.displayText(this.config.gameOverMessage);
             return;
         }
 
@@ -189,7 +203,7 @@ class Game {
                 response = this.handleHelp();
                 break;
             default:
-                response = "I don't understand that command. Try 'help' for available commands.";
+                response = this.config.invalidCommandMessage;
         }
 
         this.displayText(response);
@@ -200,16 +214,25 @@ class Game {
     }
 
     handleMovement(direction) {
-        const currentRoom = this.rooms[this.gameState.currentRoom];
-        
         if (!direction) {
-            return "Which direction do you want to go?";
+            return this.config.invalidDirectionMessage;
         }
 
+        const currentRoom = this.rooms[this.gameState.currentRoom];
+        
         for (let dir in currentRoom.exits) {
             if (direction.includes(dir)) {
                 const nextRoom = currentRoom.exits[dir];
                 
+                // Check room entry conditions
+                const roomRules = this.rules.roomConditions[nextRoom];
+                if (roomRules && roomRules.enter) {
+                    const condition = roomRules.enter.requires;
+                    if (!this.checkCondition(condition)) {
+                        return condition.message;
+                    }
+                }
+
                 // Check required items for movement
                 if (currentRoom.requiredItems && currentRoom.requiredItems[dir]) {
                     const required = currentRoom.requiredItems[dir];
@@ -221,16 +244,10 @@ class Game {
                         return `You need ${required.join(" and ")} to go that way.`;
                     }
                 }
-
-                // Special case for underground tunnel
-                if (nextRoom === 'undergroundTunnel' && !this.gameState.torchLit) {
-                    return "It's too dark to enter without a lit torch.";
-                }
                 
                 this.gameState.currentRoom = nextRoom;
                 this.displayLocationImage();
                 
-                // Play narration for the new room
                 const newRoom = this.rooms[nextRoom];
                 if (newRoom.narrationAudio) {
                     this.playNarration(newRoom.narrationAudio);
@@ -239,12 +256,12 @@ class Game {
                 return `${newRoom.description}\n\n\nAvailable actions: ${newRoom.choices.join(', ')}`;
             }
         }
-        return "You can't go that way.";
+        return this.config.cantGoMessage;
     }
 
     handleTake(itemName) {
         if (!itemName) {
-            return "What do you want to take?";
+            return this.config.invalidItemMessage;
         }
 
         const currentRoom = this.rooms[this.gameState.currentRoom];
@@ -257,79 +274,55 @@ class Game {
         if (itemIndex !== -1) {
             const actualItemName = currentRoom.items[itemIndex];
 
-            // Check required items before taking
-            if (currentRoom.requiredItems && currentRoom.requiredItems[actualItemName]) {
-                const required = currentRoom.requiredItems[actualItemName];
-                if (!required.every(item => this.gameState.inventory.includes(item))) {
-                    if (currentRoom.deathMessages && currentRoom.deathMessages[actualItemName]) {
-                        this.gameState.gameOver = true;
-                        return currentRoom.deathMessages[actualItemName];
-                    }
-                    return `You need ${required.join(" and ")} to take that.`;
+            // Check item conditions
+            const itemRules = this.rules.itemConditions[actualItemName];
+            if (itemRules && itemRules.take) {
+                const condition = itemRules.take.requires;
+                if (!this.checkCondition(condition)) {
+                    this.gameState.gameOver = condition.gameOver || false;
+                    return condition.failureMessage;
                 }
-            }
-
-            // Special case for cursed items
-            if (actualItemName === 'goldenIdol' && !this.gameState.inventory.includes('amulet')) {
-                this.gameState.gameOver = true;
-                return "As you touch the Golden Idol, its curse consumes you. You're dead!";
-            }
-
-            if (actualItemName === 'cursedTreasure' && !this.gameState.inventory.includes('amulet')) {
-                this.gameState.gameOver = true;
-                return "The cursed treasure drains your life force. You're dead!";
             }
 
             currentRoom.items.splice(itemIndex, 1);
             this.gameState.inventory.push(actualItemName);
             return `You take the ${actualItemName}.`;
         }
-        return "There's no such item here.";
+        return this.config.noSuchItemMessage;
     }
 
     handleUse(itemName) {
         if (!itemName) {
-            return "What do you want to use?";
+            return this.config.invalidItemMessage;
         }
 
-        const currentRoom = this.rooms[this.gameState.currentRoom];
-
-        if (currentRoom === 'trapRoom' && itemName === 'traps') {
-            this.gameState.gameOver = true;
-            return "You step on a pressure plate. Spikes shoot from the walls. You're dead!";
+        // Check special actions
+        const roomActions = this.rules.specialActions[this.gameState.currentRoom];
+        if (roomActions && roomActions.use && roomActions.use[itemName]) {
+            const action = roomActions.use[itemName];
+            this.gameState.gameOver = action.gameOver || false;
+            return action.message;
         }
 
         if (!this.gameState.inventory.includes(itemName)) {
-            return "You don't have that item.";
+            return this.config.dontHaveItemMessage;
         }
 
         // Check for room-specific item use messages
+        const currentRoom = this.rooms[this.gameState.currentRoom];
         if (currentRoom.itemUse && currentRoom.itemUse[itemName]) {
             return currentRoom.itemUse[itemName];
         }
 
-        switch(itemName) {
-            case 'torch':
-                this.gameState.torchLit = !this.gameState.torchLit;
-                return this.gameState.torchLit ? 
-                    "You light the torch, illuminating your surroundings." : 
-                    "You extinguish the torch.";
-            
-            case 'key':
-                if (currentRoom === 'treasureRoom') {
-                    return "You use the key to unlock a secret compartment.";
-                }
-                return "There's nothing here to unlock.";
-
-            case 'map':
-                return "The map shows the temple layout: Entrance → Hall of Statues → Various rooms including the Chamber of Idol";
-
-            case 'amulet':
-                return "The amulet glows with protective energy.";
-
-            default:
-                return "You can't use that item here.";
+        // Handle state-changing items
+        if (itemName === 'torch') {
+            this.gameState.state.torchLit = !this.gameState.state.torchLit;
+            return this.gameState.state.torchLit ? 
+                "You light the torch, illuminating your surroundings." : 
+                "You extinguish the torch.";
         }
+
+        return this.config.cantUseMessage;
     }
 
     handleLook() {
@@ -352,56 +345,59 @@ class Game {
 
     handleInventory() {
         if (this.gameState.inventory.length === 0) {
-            return "Your inventory is empty.";
+            return this.config.inventoryEmptyMessage;
         }
-        return "You are carrying: " + this.gameState.inventory.join(", ");
+        return this.config.inventoryContentsPrefix + this.gameState.inventory.join(", ");
     }
 
     handleHelp() {
-        return `Available commands:
-- go [direction]: Move in a direction (north, south, east, west)
-- take [item]: Pick up an item
-- use [item]: Use an item in your inventory
-- look: Examine your surroundings
-- inventory: Check what you're carrying
-- help: Show this help message`;
+        return this.config.helpMessage;
     }
 
     checkWinOrDeath() {
-        const currentRoom = this.gameState.currentRoom;
-
-        // Death conditions
-        if (currentRoom === 'trapRoom' && 
-            document.getElementById('commandInput').value.toLowerCase() === 'use traps') {
-            this.displayText("You step on a pressure plate. Spikes shoot from the walls. You're dead!");
-            this.gameState.gameOver = true;
-            return;
-        }
-
-        if (currentRoom === 'undergroundTunnel' && !this.gameState.torchLit) {
-            if (Math.random() < 0.5) {
-                this.displayText("You stumble in the dark and fall into a pit. Game over!");
-                this.gameState.gameOver = true;
-                return;
+        // Check win conditions
+        for (const condition of this.rules.winConditions) {
+            if (this.gameState.currentRoom === condition.room) {
+                if (this.checkCondition(condition.requires)) {
+                    this.displayText(condition.message);
+                    this.gameState.gameOver = true;
+                    return;
+                }
             }
         }
 
-        // Win conditions
-        if (currentRoom === 'exitPath' && 
-            this.gameState.inventory.includes('goldenIdol') && 
-            this.gameState.inventory.includes('amulet')) {
-            this.displayText("Congratulations! You've escaped with the Golden Idol protected by the amulet. You win!");
-            this.gameState.gameOver = true;
-            return;
+        // Check death conditions
+        for (const condition of this.rules.deathConditions) {
+            if (this.gameState.currentRoom === condition.room) {
+                if (this.checkCondition(condition.when)) {
+                    if (!condition.chance || Math.random() < condition.chance) {
+                        this.displayText(condition.message);
+                        this.gameState.gameOver = true;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    checkCondition(condition) {
+        if (!condition) return true;
+
+        if (condition.inventory) {
+            if (Array.isArray(condition.inventory)) {
+                return condition.inventory.every(item => 
+                    this.gameState.inventory.includes(item)
+                );
+            } else {
+                return this.gameState.inventory.includes(condition.inventory);
+            }
         }
 
-        if (currentRoom === 'treasureRoom' && 
-            this.gameState.inventory.includes('map') && 
-            this.gameState.inventory.includes('key')) {
-            this.displayText("Using the map and key, you discover a secret passage to safety with the treasure. You win!");
-            this.gameState.gameOver = true;
-            return;
+        if (condition.state) {
+            return this.gameState.state[condition.state] === condition.value;
         }
+
+        return true;
     }
 
     displayRoom(roomName) {
@@ -418,9 +414,8 @@ class Game {
     playNarration(audioPath) {
         if (!audioPath || !this.narrationElement) return;
 
-        // Lower background music volume during narration
         if (this.audioElement) {
-            this.audioElement.volume = 0.1;
+            this.audioElement.volume = this.config.bgMusicVolumeDuringNarration;
         }
 
         // Stop any currently playing narration
@@ -433,14 +428,14 @@ class Game {
             console.error('Error playing narration:', error, audioPath);
             // Restore background music volume if narration fails
             if (this.audioElement) {
-                this.audioElement.volume = 0.3;
+                this.audioElement.volume = this.config.bgMusicVolume;
             }
         });
 
         // Restore background music volume when narration ends
         this.narrationElement.onended = () => {
             if (this.audioElement) {
-                this.audioElement.volume = 0.3;
+                this.audioElement.volume = this.config.bgMusicVolume;
             }
         };
     }
