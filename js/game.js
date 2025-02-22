@@ -4,12 +4,15 @@ class Game {
         this.items = items;
         this.config = null;
         this.rules = null;
+        this.puzzles = null;
         this.gameState = {
             currentRoom: null,
             inventory: [],
             gameOver: false,
             state: {},
-            playedSongs: []
+            playedSongs: [],
+            solvedPuzzles: [],
+            sequenceProgress: {}
         };
 
         this.loadConfigurations().then(() => {
@@ -26,12 +29,14 @@ class Game {
 
     async loadConfigurations() {
         try {
-            const [configResponse, rulesResponse] = await Promise.all([
+            const [configResponse, rulesResponse, puzzlesResponse] = await Promise.all([
                 fetch('data/config.json'),
-                fetch('data/rules.json')
+                fetch('data/rules.json'),
+                fetch('data/puzzles.json')
             ]);
             this.config = await configResponse.json();
             this.rules = await rulesResponse.json();
+            this.puzzles = await puzzlesResponse.json();
         } catch (error) {
             console.error('Error loading configurations:', error);
         }
@@ -207,6 +212,9 @@ class Game {
             case 'help':
                 response = this.handleHelp();
                 break;
+            case 'solve':
+                response = this.handleAnagramPuzzle(object);
+                break;
             default:
                 response = this.config.invalidCommandMessage;
         }
@@ -301,7 +309,15 @@ class Game {
             return this.config.invalidItemMessage;
         }
 
-        // Check special actions
+        // Check if trying to combine items (format: "use item1 with item2")
+        const withIndex = itemName.indexOf(" with ");
+        if (withIndex !== -1) {
+            const item1 = itemName.substring(0, withIndex);
+            const item2 = itemName.substring(withIndex + 6);
+            return this.handleCombination(item1, item2);
+        }
+
+        // Existing use item logic...
         const roomActions = this.rules.specialActions[this.gameState.currentRoom];
         if (roomActions && roomActions.use && roomActions.use[itemName]) {
             const action = roomActions.use[itemName];
@@ -330,6 +346,38 @@ class Game {
         return this.config.cantUseMessage;
     }
 
+    handleCombination(item1, item2) {
+        if (!this.puzzles?.combinations) {
+            return "Item combination is not possible.";
+        }
+
+        if (!this.gameState.inventory.includes(item1) || !this.gameState.inventory.includes(item2)) {
+            return this.config.dontHaveItemMessage;
+        }
+
+        // Check all combinations for these items (in either order)
+        const combinationId = `${item1}_${item2}`;
+        const reverseCombinationId = `${item2}_${item1}`;
+        const combination = this.puzzles.combinations[combinationId] || this.puzzles.combinations[reverseCombinationId];
+
+        if (!combination) {
+            return "Those items cannot be combined.";
+        }
+
+        // Remove ingredients if specified
+        if (combination.removeIngredients) {
+            this.gameState.inventory = this.gameState.inventory.filter(
+                item => item !== item1 && item !== item2
+            );
+        }
+
+        // Add result item
+        this.gameState.inventory.push(combination.result);
+        this.updateInventory();
+
+        return combination.message;
+    }
+
     handleLook() {
         const currentRoom = this.rooms[this.gameState.currentRoom];
         let description = currentRoom.description;
@@ -356,7 +404,47 @@ class Game {
     }
 
     handleHelp() {
-        return this.config.helpMessage;
+        return `Available commands:
+- go [direction]: Move in a direction
+- take [item]: Pick up an item
+- use [item]: Use an item
+- use [item] with [item]: Combine two items
+- look: Look around
+- inventory: Check your inventory
+- solve [answer]: Solve an anagram puzzle
+- help: Show this help message`;
+    }
+
+    handleAnagramPuzzle(answer) {
+        const currentRoom = this.rooms[this.gameState.currentRoom];
+        const anagramPuzzles = this.puzzles?.anagrams;
+        
+        if (!anagramPuzzles) {
+            return "There are no anagram puzzles to solve.";
+        }
+
+        // Find a puzzle that hasn't been solved in the current room
+        const puzzleId = Object.keys(anagramPuzzles).find(id => 
+            !this.gameState.solvedPuzzles.includes(id) &&
+            currentRoom.puzzles?.includes(id)
+        );
+
+        if (!puzzleId) {
+            return "There are no anagram puzzles to solve here.";
+        }
+
+        const puzzle = anagramPuzzles[puzzleId];
+        if (answer.toLowerCase() === puzzle.solution.toLowerCase()) {
+            this.gameState.solvedPuzzles.push(puzzleId);
+            if (puzzle.reward) {
+                this.gameState.inventory.push(puzzle.reward);
+                this.updateInventory();
+                return `Correct! You've solved the puzzle and received: ${puzzle.reward}`;
+            }
+            return "Correct! You've solved the puzzle!";
+        }
+
+        return puzzle.hint || "That's not the correct solution.";
     }
 
     checkWinOrDeath() {

@@ -1,0 +1,32 @@
+{
+    "combinations": {
+        "torch_flint": {
+            "ingredients": ["torch", "flint"],
+            "result": "litTorch",
+            "message": "You strike the flint against the torch, lighting it!",
+            "removeIngredients": true
+        },
+        "herb_bottle": {
+            "ingredients": ["herbs", "emptyBottle"],
+            "result": "healingPotion",
+            "message": "You create a healing potion by mixing the herbs with water in the bottle.",
+            "removeIngredients": true
+        }
+    },
+    "sequences": {
+        "altarRitual": {
+            "requiredSequence": ["placeOffering", "lightCandles", "chantSpell"],
+            "message": "The ritual is complete! The ancient door begins to open...",
+            "reward": "ancientKey",
+            "currentProgress": []
+        }
+    },
+    "anagrams": {
+        "libraryScroll": {
+            "scrambled": "ARCANE GATES",
+            "solution": "SACRED GATE",
+            "hint": "Rearrange the letters to reveal the true name of the temple entrance",
+            "reward": "scrollOfWisdom"
+        }
+    }
+}

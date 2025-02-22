@@ -25,6 +25,10 @@ Since this game loads JSON files, you'll need to run it through a local web serv
 - Items to collect and use
 - Various win and death conditions
 - Inventory system
+- Interactive puzzle system with:
+  - Item combinations
+  - Sequence puzzles
+  - Anagram puzzles
 
 ## Creating Your Own Adventure
 
@@ -133,6 +137,91 @@ The game engine is designed to be modular, allowing you to create your own adven
      ]
    }
    ```
+
+### Creating Puzzles
+
+The game includes a puzzle system that allows you to create various types of interactive puzzles. Puzzles are defined in `puzzles.json`.
+
+1. **Item Combinations**
+   ```json
+   {
+     "combinations": {
+       "torch_flint": {
+         "ingredients": ["torch", "flint"],
+         "result": "litTorch",
+         "message": "You strike the flint against the torch, lighting it!",
+         "removeIngredients": true
+       }
+     }
+   }
+   ```
+   Players can combine items using the command: `use item1 with item2`
+
+2. **Sequence Puzzles**
+   ```json
+   {
+     "sequences": {
+       "altarRitual": {
+         "requiredSequence": ["placeOffering", "lightCandles", "chantSpell"],
+         "message": "The ritual is complete!",
+         "reward": "ancientKey"
+       }
+     }
+   }
+   ```
+   Players must perform actions in the correct order to complete the puzzle.
+
+3. **Anagram Puzzles**
+   ```json
+   {
+     "anagrams": {
+       "libraryScroll": {
+         "scrambled": "ARCANE GATES",
+         "solution": "SACRED GATE",
+         "hint": "Rearrange the letters to reveal the true name",
+         "reward": "scrollOfWisdom"
+       }
+     }
+   }
+   ```
+   Players can solve anagrams using the command: `solve [answer]`
+
+To add puzzles to a room, include a `puzzles` array in the room definition:
+```json
+{
+  "library": {
+    "description": "A dusty library...",
+    "puzzles": ["libraryScroll"]
+  }
+}
+```
+
+### Tips for Creating Puzzles
+
+1. **Item Combinations**
+   - Make combinations logical and intuitive
+   - Provide hints through item descriptions or room text
+   - Consider whether ingredients should be consumed
+   - Use combinations to create tools needed for progression
+
+2. **Sequence Puzzles**
+   - Base sequences on environmental storytelling
+   - Include hints in room descriptions
+   - Consider making steps discoverable through exploration
+   - Use sequences for ritual or mechanical interactions
+
+3. **Anagram Puzzles**
+   - Keep solutions relevant to the game's theme
+   - Provide clear hints
+   - Consider puzzle difficulty based on word length
+   - Use rewards that make sense in context
+
+4. **General Puzzle Tips**
+   - Ensure puzzles fit the game's theme and setting
+   - Provide adequate clues in room descriptions
+   - Make rewards meaningful for game progression
+   - Test all possible solutions and edge cases
+   - Consider adding multiple ways to solve puzzles
 
 ### Example: Creating a Sci-Fi Adventure
 
