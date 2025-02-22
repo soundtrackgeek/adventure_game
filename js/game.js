@@ -27,16 +27,32 @@ class Game {
             'Forgotten Deity.m4a',
             'Temple of Echoes.m4a'
         ];
-        this.initializeMusic();
-        
+        this.audioElement = document.getElementById('bgMusic');
+        if (!this.audioElement) {
+            console.error('Background music element not found');
+            return;
+        }
+
+        // Set up audio error handling
+        this.audioElement.addEventListener('error', (e) => {
+            console.error('Audio error:', e);
+        });
+
+        // Initialize music system but wait for first user interaction
+        document.addEventListener('click', () => {
+            if (!this.musicInitialized) {
+                this.initializeMusic();
+                this.musicInitialized = true;
+            }
+        }, { once: false });
+
         // Immediately show initial room description
         this.displayInitialRoom();
         this.displayLocationImage();
     }
 
     initializeMusic() {
-        const audioElement = document.getElementById('bgMusic');
-        if (!audioElement) return;
+        if (!this.audioElement) return;
 
         const playNextSong = () => {
             // If all songs have been played, reset the playlist
@@ -57,12 +73,14 @@ class Game {
             this.gameState.playedSongs.push(selectedSong);
             
             // Play the song
-            audioElement.src = `assets/sounds/${selectedSong}`;
-            audioElement.play();
+            this.audioElement.src = `assets/sounds/${selectedSong}`;
+            this.audioElement.play().catch(error => {
+                console.error('Error playing audio:', error);
+            });
         };
 
         // Play next song when current one ends
-        audioElement.addEventListener('ended', playNextSong);
+        this.audioElement.addEventListener('ended', playNextSong);
         
         // Start playing the first song
         playNextSong();
