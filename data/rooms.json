@@ -1,48 +1,56 @@
 {
     "jungleClearing": {
         "description": "You find yourself in a small clearing, surrounded by the thick, emerald embrace of the jungle. The air is heavy with the scent of damp earth and exotic flowers. Before you, partially obscured by creeping vines and moss, stands an ancient temple, its weathered stone facade hinting at forgotten secrets and untold dangers.",
+        "image": "assets/images/jungle-clearing.jpg",
         "exits": { "north": "templeEntrance" },
         "items": ["torch"],
         "choices": ["Go north to the Temple Entrance", "Take torch"]
     },
     "templeEntrance": {
         "description": "You step up to the imposing entrance of the temple, where towering stone doors stand ajar, as if inviting you into the mysteries within. The doors are adorned with intricate carvings that tell tales of ancient rituals, sacrifices, and gods long forgotten. The air here feels cooler, and the silence is almost palpable, broken only by the distant calls of jungle creatures.",
+        "image": "assets/images/temple-entrance.jpg",
         "exits": { "south": "jungleClearing", "north": "hallOfStatues" },
         "items": [],
         "choices": ["Go south to Jungle Clearing", "Go north to Hall of Statues"]
     },
     "hallOfStatues": {
         "description": "You enter a vast hall, its walls lined with imposing statues of warriors, each one unique in its armor and weaponry, frozen in time. Their stony gazes seem to follow you as you move. In the center, one statue stands out, its hand outstretched, holding what appears to be an ancient map, yellowed with age and covered in cryptic symbols.",
+        "image": "assets/images/hall-of-statues.jpg",
         "exits": { "south": "templeEntrance", "east": "trapRoom", "west": "altarRoom" },
         "items": ["map"],
         "choices": ["Go south to Temple Entrance", "Go east to Trap Room", "Go west to Altar Room", "Take map"]
     },
     "trapRoom": {
         "description": "As you step into this chamber, a sense of dread washes over you. The floor is a mosaic of pressure plates, and the walls are pockmarked with holes that could conceal darts or worse. Spears protrude from the ground at odd angles, and the faint click of mechanisms echoes ominously. Every step here could be your last; caution is your only ally.",
+        "image": "assets/images/trap-room.jpg",
         "exits": { "west": "hallOfStatues", "north": "library", "east": "undergroundTunnel" },
         "items": [],
         "choices": ["Go west to Hall of Statues", "Go north to Library", "Go east to Underground Tunnel", "Use traps"]
     },
     "library": {
         "description": "You find yourself in a dimly lit library, its shelves sagging under the weight of countless scrolls and tomes, each one a repository of ancient wisdom. Dust motes dance in the beams of light that filter through cracks in the ceiling. On a nearby shelf, amidst the clutter, an ornate key catches your eye, its metal gleaming faintly as if beckoning you to take it.",
+        "image": "assets/images/library.jpg",
         "exits": { "south": "trapRoom", "east": "treasureRoom" },
         "items": ["key"],
         "choices": ["Go south to Trap Room", "Go east to Treasure Room", "Take key"]
     },
     "altarRoom": {
         "description": "This chamber is dominated by a stone altar, its surface etched with arcane symbols that seem to pulse with a life of their own. Atop the altar, an amulet rests, emitting a soft, ethereal glow that casts eerie shadows on the walls. The air here tingles with latent magic, and you can’t shake the feeling that you’re being watched.",
+        "image": "assets/images/altar-room.jpg",
         "exits": { "east": "hallOfStatues" },
         "items": ["amulet"],
         "choices": ["Go east to Hall of Statues", "Take amulet"]
     },
     "undergroundTunnel": {
         "description": "You descend into a narrow, winding tunnel that burrows deeper into the bowels of the temple. The walls are damp and cold to the touch, and the air grows stale. Your torchlight flickers, casting long, dancing shadows that play tricks on your mind. The path ahead is uncertain, but the promise of discovery urges you forward.",
+        "image": "assets/images/underground-tunnel.jpg",
         "exits": { "west": "trapRoom", "north": "chamberOfIdol" },
         "items": [],
         "choices": ["Go west to Trap Room", "Go north to Chamber of the Idol"]
     },
     "chamberOfIdol": {
         "description": "At last, you reach the heart of the temple: a cavernous chamber where the legendary Golden Idol sits atop a pedestal, bathed in a shaft of otherworldly light. A menacing temple guardian blocks your path, wielding an ancient blade. You'll need a weapon to face this formidable opponent.",
+        "image": "assets/images/chamber-of-idol.jpg",
         "exits": { "south": "undergroundTunnel", "north": "exitPath" },
         "items": ["goldenIdol"],
         "choices": [
@@ -67,12 +75,14 @@
     },
     "treasureRoom": {
         "description": "You stumble into a chamber that glitters with unimaginable wealth. Piles of gold coins spill from chests, and jewels of every hue sparkle in the dim light. In the corner, half-buried under a mound of treasure, lies a magnificent sword, its blade etched with runes that hint at its power. But beware, for such riches often come with a curse.",
+        "image": "assets/images/treasure-room.jpg",
         "exits": { "west": "library" },
         "items": ["sword", "cursedTreasure"],
         "choices": ["Go west to Library", "Take sword", "Take cursed treasure"]
     },
     "exitPath": {
         "description": "You find a narrow path that winds its way out of the temple’s depths, leading back to the vibrant jungle outside. The sounds of nature grow louder as you approach the exit, a stark contrast to the oppressive silence within. Freedom is within reach, but the adventures you’ve had will stay with you forever.",
+        "image": "assets/images/exit-path.jpg",
         "exits": { "south": "chamberOfIdol" },
         "items": [],
         "choices": ["Go south to Chamber of the Idol"]

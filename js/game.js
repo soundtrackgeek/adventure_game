@@ -18,6 +18,7 @@ class Game {
         
         // Immediately show initial room description
         this.displayInitialRoom();
+        this.displayLocationImage();
     }
 
     displayInitialRoom() {
@@ -37,6 +38,16 @@ class Game {
             output.scrollTop = output.scrollHeight;
         } else {
             console.error('Output element not found while trying to display:', text);
+        }
+    }
+
+    displayLocationImage() {
+        const currentRoom = this.rooms[this.gameState.currentRoom];
+        if (currentRoom && currentRoom.image) {
+            const imageContainer = document.getElementById('locationImage');
+            if (imageContainer) {
+                imageContainer.innerHTML = `<img src="${currentRoom.image}" alt="Location: ${this.gameState.currentRoom}">`;
+            }
         }
     }
 
@@ -125,6 +136,7 @@ class Game {
                 }
                 
                 this.gameState.currentRoom = nextRoom;
+                this.displayLocationImage();
                 return `${this.rooms[nextRoom].description}\n\n\nAvailable actions: ${this.rooms[nextRoom].choices.join(', ')}`;
             }
         }
