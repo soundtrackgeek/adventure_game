@@ -170,8 +170,18 @@ class Game {
     updateInventory() {
         const inventoryList = document.getElementById('inventoryList');
         if (inventoryList) {
-            inventoryList.textContent = this.gameState.inventory.length > 0 ? 
-                this.gameState.inventory.join(', ') : 'empty';
+            if (this.gameState.inventory.length > 0) {
+                // Format each item name with proper spacing and capitalization
+                const formattedItems = this.gameState.inventory.map(item => {
+                    // Split by camelCase and capitalize first letter of each word
+                    return item.replace(/([A-Z])/g, ' $1')  // Add space before capitals
+                              .replace(/^./, str => str.toUpperCase())  // Capitalize first letter
+                              .trim();  // Remove any leading/trailing spaces
+                });
+                inventoryList.textContent = formattedItems.join(', ');
+            } else {
+                inventoryList.textContent = 'empty';
+            }
         }
     }
 
@@ -279,9 +289,9 @@ class Game {
 
         const currentRoom = this.rooms[this.gameState.currentRoom];
         
-        const normalizedInput = itemName.toLowerCase().replace(/\s+/g, '');
+        const normalizedInput = this.normalizeItemName(itemName);
         const itemIndex = currentRoom.items.findIndex(item => 
-            item.toLowerCase().replace(/\s+/g, '') === normalizedInput
+            this.normalizeItemName(item) === normalizedInput
         );
         
         if (itemIndex !== -1) {
@@ -314,29 +324,38 @@ class Game {
         if (withIndex !== -1) {
             const item1 = itemName.substring(0, withIndex);
             const item2 = itemName.substring(withIndex + 6);
-            return this.handleCombination(item1, item2);
+            return this.handleCombination(this.normalizeItemName(item1), this.normalizeItemName(item2));
         }
 
-        // Existing use item logic...
+        // Normalize the input item name to match inventory format
+        const normalizedInput = this.normalizeItemName(itemName);
+        
+        // Check for special room actions
         const roomActions = this.rules.specialActions[this.gameState.currentRoom];
-        if (roomActions && roomActions.use && roomActions.use[itemName]) {
-            const action = roomActions.use[itemName];
+        if (roomActions && roomActions.use && roomActions.use[normalizedInput]) {
+            const action = roomActions.use[normalizedInput];
             this.gameState.gameOver = action.gameOver || false;
             return action.message;
         }
 
-        if (!this.gameState.inventory.includes(itemName)) {
+        // Check if player has the item
+        if (!this.gameState.inventory.some(item => this.normalizeItemName(item) === normalizedInput)) {
             return this.config.dontHaveItemMessage;
         }
 
+        // Get the actual item name from inventory
+        const actualItemName = this.gameState.inventory.find(item => 
+            this.normalizeItemName(item) === normalizedInput
+        );
+
         // Check for room-specific item use messages
         const currentRoom = this.rooms[this.gameState.currentRoom];
-        if (currentRoom.itemUse && currentRoom.itemUse[itemName]) {
-            return currentRoom.itemUse[itemName];
+        if (currentRoom.itemUse && currentRoom.itemUse[actualItemName]) {
+            return currentRoom.itemUse[actualItemName];
         }
 
         // Handle state-changing items
-        const stateItem = this.rules.stateChangingItems?.[itemName];
+        const stateItem = this.rules.stateChangingItems?.[actualItemName];
         if (stateItem) {
             const currentState = this.gameState.state[stateItem.toggleState] || false;
             this.gameState.state[stateItem.toggleState] = !currentState;
@@ -344,6 +363,11 @@ class Game {
         }
 
         return this.config.cantUseMessage;
+    }
+
+    // Helper method to normalize item names
+    normalizeItemName(itemName) {
+        return itemName.toLowerCase().replace(/\s+/g, '');
     }
 
     handleCombination(item1, item2) {
