@@ -125,8 +125,14 @@ class Game {
         }
 
         const currentRoom = this.rooms[this.gameState.currentRoom];
-        // Convert item names to lowercase for comparison
-        const itemIndex = currentRoom.items.findIndex(item => item.toLowerCase() === itemName.toLowerCase());
+        
+        // Normalize the input item name (remove spaces and convert to lowercase)
+        const normalizedInput = itemName.toLowerCase().replace(/\s+/g, '');
+        
+        // Find the item by comparing normalized versions
+        const itemIndex = currentRoom.items.findIndex(item => 
+            item.toLowerCase().replace(/\s+/g, '') === normalizedInput
+        );
         
         if (itemIndex !== -1) {
             const actualItemName = currentRoom.items[itemIndex];  // Use the actual cased name
