@@ -21,7 +21,7 @@
         "description": "This room is filled with deadly traps. Tread carefully.",
         "exits": { "west": "hallOfStatues", "north": "library", "east": "undergroundTunnel" },
         "items": [],
-        "choices": ["Go west to Hall of Statues", "Go north to Library", "Go east to Underground Tunnel", "Cross traps"]
+        "choices": ["Go west to Hall of Statues", "Go north to Library", "Go east to Underground Tunnel", "Use traps"]
     },
     "library": {
         "description": "An ancient library with dusty scrolls. A key rests on a shelf.",

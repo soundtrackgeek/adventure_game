@@ -150,11 +150,16 @@ class Game {
             return "What do you want to use?";
         }
 
+        const currentRoom = this.gameState.currentRoom;
+
+        if (currentRoom === 'trapRoom' && itemName === 'traps') {
+            this.gameState.gameOver = true;
+            return "You step on a pressure plate. Spikes shoot from the walls. You're dead!";
+        }
+
         if (!this.gameState.inventory.includes(itemName)) {
             return "You don't have that item.";
         }
-
-        const currentRoom = this.gameState.currentRoom;
 
         switch(itemName) {
             case 'torch':
@@ -216,7 +221,7 @@ class Game {
 
         // Death conditions
         if (currentRoom === 'trapRoom' && 
-            document.getElementById('commandInput').value.toLowerCase() === 'cross traps') {
+            document.getElementById('commandInput').value.toLowerCase() === 'use traps') {
             this.displayText("You step on a pressure plate. Spikes shoot from the walls. You're dead!");
             this.gameState.gameOver = true;
             return;
