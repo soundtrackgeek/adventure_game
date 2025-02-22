@@ -171,13 +171,7 @@ class Game {
         const inventoryList = document.getElementById('inventoryList');
         if (inventoryList) {
             if (this.gameState.inventory.length > 0) {
-                // Format each item name with proper spacing and capitalization
-                const formattedItems = this.gameState.inventory.map(item => {
-                    // Split by camelCase and capitalize first letter of each word
-                    return item.replace(/([A-Z])/g, ' $1')  // Add space before capitals
-                              .replace(/^./, str => str.toUpperCase())  // Capitalize first letter
-                              .trim();  // Remove any leading/trailing spaces
-                });
+                const formattedItems = this.gameState.inventory.map(item => this.formatItemName(item));
                 inventoryList.textContent = formattedItems.join(', ');
             } else {
                 inventoryList.textContent = 'empty';
@@ -282,6 +276,13 @@ class Game {
         return this.config.cantGoMessage;
     }
 
+    // Helper method to format item name for display
+    formatItemName(itemName) {
+        return itemName.replace(/([A-Z])/g, ' $1')  // Add space before capitals
+                      .replace(/^./, str => str.toUpperCase())  // Capitalize first letter
+                      .trim();  // Remove any leading/trailing spaces
+    }
+
     handleTake(itemName) {
         if (!itemName) {
             return this.config.invalidItemMessage;
@@ -309,7 +310,7 @@ class Game {
 
             currentRoom.items.splice(itemIndex, 1);
             this.gameState.inventory.push(actualItemName);
-            return `You take the ${actualItemName}.`;
+            return `You take the ${this.formatItemName(actualItemName)}.`;
         }
         return this.config.noSuchItemMessage;
     }
@@ -322,9 +323,22 @@ class Game {
         // Check if trying to combine items (format: "use item1 with item2")
         const withIndex = itemName.indexOf(" with ");
         if (withIndex !== -1) {
-            const item1 = itemName.substring(0, withIndex);
-            const item2 = itemName.substring(withIndex + 6);
-            return this.handleCombination(this.normalizeItemName(item1), this.normalizeItemName(item2));
+            // Get the full item names before normalizing
+            const item1Text = itemName.substring(0, withIndex);
+            const item2Text = itemName.substring(withIndex + 6);
+            
+            // Find actual item names from inventory that match when normalized
+            const item1 = this.gameState.inventory.find(item => 
+                this.normalizeItemName(item) === this.normalizeItemName(item1Text)
+            );
+            const item2 = this.gameState.inventory.find(item => 
+                this.normalizeItemName(item) === this.normalizeItemName(item2Text)
+            );
+            
+            if (item1 && item2) {
+                return this.handleCombination(item1, item2);
+            }
+            return this.config.dontHaveItemMessage;
         }
 
         // Normalize the input item name to match inventory format
