@@ -393,9 +393,13 @@ class Game {
             return this.config.dontHaveItemMessage;
         }
 
+        // Normalize the item names for combination checking
+        const normalizedItem1 = this.normalizeItemName(item1);
+        const normalizedItem2 = this.normalizeItemName(item2);
+
         // Check all combinations for these items (in either order)
-        const combinationId = `${item1}_${item2}`;
-        const reverseCombinationId = `${item2}_${item1}`;
+        const combinationId = `${normalizedItem1}_${normalizedItem2}`;
+        const reverseCombinationId = `${normalizedItem2}_${normalizedItem1}`;
         const combination = this.puzzles.combinations[combinationId] || this.puzzles.combinations[reverseCombinationId];
 
         if (!combination) {

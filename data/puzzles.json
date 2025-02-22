@@ -6,7 +6,7 @@
             "message": "You strike the flint against the torch, lighting it!",
             "removeIngredients": true
         },
-        "herb_bottle": {
+        "herbs_emptyBottle": {
             "ingredients": ["herbs", "emptyBottle"],
             "result": "healingPotion",
             "message": "You create a healing potion by mixing the herbs with water in the bottle.",
