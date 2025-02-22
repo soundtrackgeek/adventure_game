@@ -8,7 +8,8 @@ class Game {
             currentRoom: null,
             inventory: [],
             gameOver: false,
-            state: {} // For custom game states like torchLit
+            state: {},
+            playedSongs: []
         };
 
         this.loadConfigurations().then(() => {
@@ -37,7 +38,7 @@ class Game {
     }
 
     setupAudio() {
-        this.songs = [];  // Will be populated when music is initialized
+        this.songs = [];
         this.audioElement = document.getElementById('bgMusic');
         this.narrationElement = document.getElementById('narration');
         if (!this.audioElement || !this.narrationElement) {
@@ -45,8 +46,9 @@ class Game {
             return;
         }
 
-        // Set background music volume lower
+        // Set initial volumes
         this.audioElement.volume = this.config.bgMusicVolume;
+        this.narrationElement.volume = 1.0;
         this.musicInitialized = false;
 
         // Set up audio error handling
@@ -54,12 +56,11 @@ class Game {
             console.error('Audio error:', e);
         });
 
-        // Initialize audio systems on first click
-        document.addEventListener('click', () => {
+        // Initialize audio systems when ready
+        const initAudioOnInteraction = () => {
             if (!this.musicInitialized) {
                 this.loadMusicFiles().then(() => {
                     this.initializeMusic();
-                    // Play the initial room's narration after music starts
                     const currentRoom = this.rooms[this.gameState.currentRoom];
                     if (currentRoom && currentRoom.narrationAudio) {
                         this.playNarration(currentRoom.narrationAudio);
@@ -67,7 +68,11 @@ class Game {
                     this.musicInitialized = true;
                 });
             }
-        }, { once: true });
+        };
+
+        // Listen for both click and keypress events
+        document.addEventListener('click', initAudioOnInteraction, { once: true });
+        document.addEventListener('keypress', initAudioOnInteraction, { once: true });
     }
 
     async loadMusicFiles() {

@@ -3,14 +3,16 @@ let game;
 // Load game data
 async function loadGameData() {
     try {
-        // Force clear any existing content
         const output = document.getElementById('output');
         if (!output) {
             throw new Error('Output element not found');
         }
-        output.innerHTML = '<p>Loading game data...</p>';
         
-        // Force reload the JSON files
+        // Set a timeout to show loading message only if loading takes more than 500ms
+        const loadingTimeout = setTimeout(() => {
+            output.innerHTML = '<p>Loading game data...</p>';
+        }, 500);
+        
         const timestamp = Date.now();
         const [roomsResponse, itemsResponse] = await Promise.all([
             fetch(`./data/rooms.json?t=${timestamp}`),
@@ -25,6 +27,9 @@ async function loadGameData() {
             roomsResponse.json(),
             itemsResponse.json()
         ]);
+
+        // Clear the loading timeout since data is loaded
+        clearTimeout(loadingTimeout);
 
         if (!rooms || !rooms.jungleClearing) {
             throw new Error('Invalid game data structure');
