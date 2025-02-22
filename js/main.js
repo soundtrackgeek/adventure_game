@@ -3,30 +3,41 @@ let game;
 // Load game data
 async function loadGameData() {
     try {
-        // Show loading state
-        document.getElementById('output').innerHTML = '<p>Loading game data...</p>';
+        // Force clear any existing content
+        const output = document.getElementById('output');
+        if (!output) {
+            throw new Error('Output element not found');
+        }
+        output.innerHTML = '<p>Loading game data...</p>';
         
+        // Force reload the JSON files
+        const timestamp = Date.now();
         const [roomsResponse, itemsResponse] = await Promise.all([
-            fetch('./data/rooms.json').catch(() => {
-                throw new Error('Failed to load rooms data. Check if rooms.json exists.');
-            }),
-            fetch('./data/items.json').catch(() => {
-                throw new Error('Failed to load items data. Check if items.json exists.');
-            })
+            fetch(`./data/rooms.json?t=${timestamp}`),
+            fetch(`./data/items.json?t=${timestamp}`)
         ]);
 
         if (!roomsResponse.ok || !itemsResponse.ok) {
-            throw new Error('One or more game data files failed to load.');
+            throw new Error('Failed to load game data. Try refreshing with Ctrl+F5.');
         }
 
-        const rooms = await roomsResponse.json();
-        const items = await itemsResponse.json();
-        
-        // Initialize game after loading data
+        const [rooms, items] = await Promise.all([
+            roomsResponse.json(),
+            itemsResponse.json()
+        ]);
+
+        if (!rooms || !rooms.jungleClearing) {
+            throw new Error('Invalid game data structure');
+        }
+
+        // Clear any existing game state
+        game = null;
+        // Create new game instance
         game = new Game(rooms, items);
         
         // Display initial game state
         const initialText = `Welcome to Temple Adventure!\n\n${rooms.jungleClearing.description}\n\nAvailable actions: ${rooms.jungleClearing.choices.join(', ')}\n\nType 'help' for a list of commands.`;
+        console.log('Displaying initial text:', initialText);
         game.displayText(initialText);
         game.updateInventory();
 
@@ -36,13 +47,15 @@ async function loadGameData() {
             button.onclick = () => game.processCommand();
         }
     } catch (error) {
-        console.error('Error loading game data:', error);
-        document.getElementById('output').innerHTML = `<p>Error: ${error.message}</p>`;
+        console.error('Error during game initialization:', error);
+        if (output) {
+            output.innerHTML = `<p>Error: ${error.message}</p>`;
+        }
     }
 }
 
 // Event listeners
-document.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('load', () => {
     loadGameData();
     
     const commandInput = document.getElementById('commandInput');

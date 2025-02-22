@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Temple Adventure Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -16,6 +19,11 @@
         </div>
         <div id="inventory" class="inventory">Inventory: <span id="inventoryList"></span></div>
     </div>
-    <script src="js/game.js"></script>
+    <script>
+        // Force cache refresh of game files
+        const timestamp = Date.now();
+        document.write(`<script src="js/game.js?v=${timestamp}"><\/script>`);
+        document.write(`<script src="js/main.js?v=${timestamp}"><\/script>`);
+    </script>
 </body>
 </html>

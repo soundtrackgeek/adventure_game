@@ -8,17 +8,36 @@ class Game {
             gameOver: false,
             torchLit: false
         };
-        // Clear any existing content when game is initialized
+        // Ensure output element exists and is cleared
         const output = document.getElementById('output');
-        if (output) {
-            output.innerHTML = '';
+        if (!output) {
+            console.error('Output element not found');
+            return;
+        }
+        output.innerHTML = '';
+        
+        // Immediately show initial room description
+        this.displayInitialRoom();
+    }
+
+    displayInitialRoom() {
+        const currentRoom = this.rooms[this.gameState.currentRoom];
+        if (currentRoom) {
+            const initialText = `Welcome to Temple Adventure!\n\n${currentRoom.description}\n\nAvailable actions: ${currentRoom.choices.join(', ')}\n\nType 'help' for a list of commands.`;
+            this.displayText(initialText);
+        } else {
+            console.error('Initial room not found:', this.gameState.currentRoom);
         }
     }
 
     displayText(text) {
         const output = document.getElementById('output');
-        output.innerHTML += `<p>${text}</p>`;
-        output.scrollTop = output.scrollHeight;
+        if (output) {
+            output.innerHTML += `<p>${text}</p>`;
+            output.scrollTop = output.scrollHeight;
+        } else {
+            console.error('Output element not found while trying to display:', text);
+        }
     }
 
     updateInventory() {
