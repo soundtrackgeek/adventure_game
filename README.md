@@ -113,6 +113,15 @@ The game engine is designed to be modular, allowing you to create your own adven
          }
        }
      },
+     "stateChangingItems": {
+       "torch": {
+         "toggleState": "torchLit",
+         "messages": {
+           "true": "You light the torch, illuminating your surroundings.",
+           "false": "You extinguish the torch."
+         }
+       }
+     },
      "winConditions": [
        {
          "room": "exit",
@@ -204,9 +213,34 @@ Here's how you might structure a sci-fi adventure:
 1. Plan your map first - sketch out rooms and connections
 2. Create atmospheric descriptions that fit your theme
 3. Design puzzles around item requirements and room conditions
-4. Test all possible paths through your game
-5. Add appropriate images to `assets/images/` for each room
-6. Record narration audio (optional) and place in `assets/sounds/narration/`
+4. Consider using state-changing items for interactive puzzles
+5. Test all possible paths through your game
+6. Add appropriate images to `assets/images/` for each room
+7. Record narration audio (optional) and place in `assets/sounds/narration/`
+
+### Creating State-Changing Items
+
+State-changing items are special items that can toggle game states when used. This is useful for creating interactive puzzles or environmental changes. To create a state-changing item:
+
+1. Add the item to your `items.json` as normal
+2. In `rules.json`, add an entry under `stateChangingItems`:
+   ```json
+   "itemName": {
+     "toggleState": "stateName",
+     "messages": {
+       "true": "Message when state is turned on",
+       "false": "Message when state is turned off"
+     }
+   }
+   ```
+
+Example uses:
+- A torch that can be lit/unlit
+- A lever that opens/closes doors
+- A switch that powers machines on/off
+- A magical crystal that reveals/hides hidden passages
+
+The state can then be checked in room conditions to control access or trigger special events.
 
 ### Required Assets
 

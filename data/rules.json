@@ -40,6 +40,15 @@
             }
         }
     },
+    "stateChangingItems": {
+        "torch": {
+            "toggleState": "torchLit",
+            "messages": {
+                "true": "You light the torch, illuminating your surroundings.",
+                "false": "You extinguish the torch."
+            }
+        }
+    },
     "winConditions": [
         {
             "room": "exitPath",

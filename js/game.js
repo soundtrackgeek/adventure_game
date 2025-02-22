@@ -320,11 +320,11 @@ class Game {
         }
 
         // Handle state-changing items
-        if (itemName === 'torch') {
-            this.gameState.state.torchLit = !this.gameState.state.torchLit;
-            return this.gameState.state.torchLit ? 
-                "You light the torch, illuminating your surroundings." : 
-                "You extinguish the torch.";
+        const stateItem = this.rules.stateChangingItems?.[itemName];
+        if (stateItem) {
+            const currentState = this.gameState.state[stateItem.toggleState] || false;
+            this.gameState.state[stateItem.toggleState] = !currentState;
+            return stateItem.messages[(!currentState).toString()];
         }
 
         return this.config.cantUseMessage;
