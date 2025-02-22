@@ -36,21 +36,27 @@ class Game {
 
         // Set background music volume lower
         this.audioElement.volume = 0.3;
+        this.musicInitialized = false;
 
         // Set up audio error handling
         this.audioElement.addEventListener('error', (e) => {
             console.error('Audio error:', e);
         });
 
-        // Initialize music system but wait for first user interaction
+        // Initialize audio systems on first click
         document.addEventListener('click', () => {
             if (!this.musicInitialized) {
                 this.initializeMusic();
+                // Play the initial room's narration after music starts
+                const currentRoom = this.rooms[this.gameState.currentRoom];
+                if (currentRoom && currentRoom.narrationAudio) {
+                    this.playNarration(currentRoom.narrationAudio);
+                }
                 this.musicInitialized = true;
             }
-        }, { once: false });
+        }, { once: true });  // Changed to once: true since we only need this once
 
-        // Immediately show initial room description
+        // Show initial room description
         this.displayInitialRoom();
         this.displayLocationImage();
     }
@@ -95,7 +101,6 @@ class Game {
         if (currentRoom) {
             const initialText = `Welcome to Temple Adventure!\n\n\n${currentRoom.description}\n\n\nAvailable actions: ${currentRoom.choices.join(', ')}\n\nType 'help' for a list of commands.`;
             this.displayText(initialText);
-            this.playNarration(currentRoom.narrationAudio);
         } else {
             console.error('Initial room not found:', this.gameState.currentRoom);
         }
@@ -383,39 +388,13 @@ class Game {
     playNarration(audioPath) {
         if (!audioPath || !this.narrationElement) return;
 
-        // Only play narration if we've had user interaction
-        if (!this.musicInitialized) {
-            // Add a one-time click handler to play the initial narration
-            document.addEventListener('click', () => {
-                if (!this.musicInitialized) {
-                    // Lower background music volume during narration
-                    if (this.audioElement) {
-                        this.audioElement.volume = 0.1;
-                    }
-
-                    this.narrationElement.src = audioPath;
-                    this.narrationElement.play().catch(error => {
-                        console.error('Error playing narration:', error, audioPath);
-                    });
-
-                    // Restore background music volume when narration ends
-                    this.narrationElement.onended = () => {
-                        if (this.audioElement) {
-                            this.audioElement.volume = 0.3;
-                        }
-                    };
-                }
-            }, { once: true });
-            return;
-        }
-
         // Lower background music volume during narration
         if (this.audioElement) {
             this.audioElement.volume = 0.1;
         }
 
         this.narrationElement.src = audioPath;
-        console.log('Playing narration:', audioPath); // Add debug log
+        console.log('Playing narration:', audioPath);
         this.narrationElement.play().catch(error => {
             console.error('Error playing narration:', error, audioPath);
         });
