@@ -6,8 +6,10 @@ class Game {
             currentRoom: 'jungleClearing',
             inventory: [],
             gameOver: false,
-            torchLit: false
+            torchLit: false,
+            playedSongs: [] // Track played songs
         };
+        
         // Ensure output element exists and is cleared
         const output = document.getElementById('output');
         if (!output) {
@@ -16,9 +18,54 @@ class Game {
         }
         output.innerHTML = '';
         
+        // Initialize music system
+        this.songs = [
+            'Ancient Echoes Distort.m4a',
+            'Ancient Echoes Within.m4a',
+            'Ancient Pulse.m4a',
+            'Ancient Transmutation.m4a',
+            'Forgotten Deity.m4a',
+            'Temple of Echoes.m4a'
+        ];
+        this.initializeMusic();
+        
         // Immediately show initial room description
         this.displayInitialRoom();
         this.displayLocationImage();
+    }
+
+    initializeMusic() {
+        const audioElement = document.getElementById('bgMusic');
+        if (!audioElement) return;
+
+        const playNextSong = () => {
+            // If all songs have been played, reset the playlist
+            if (this.gameState.playedSongs.length === this.songs.length) {
+                this.gameState.playedSongs = [];
+            }
+
+            // Get available songs (not yet played)
+            const availableSongs = this.songs.filter(song => 
+                !this.gameState.playedSongs.includes(song)
+            );
+
+            // Randomly select a song
+            const randomIndex = Math.floor(Math.random() * availableSongs.length);
+            const selectedSong = availableSongs[randomIndex];
+            
+            // Add to played songs
+            this.gameState.playedSongs.push(selectedSong);
+            
+            // Play the song
+            audioElement.src = `assets/sounds/${selectedSong}`;
+            audioElement.play();
+        };
+
+        // Play next song when current one ends
+        audioElement.addEventListener('ended', playNextSong);
+        
+        // Start playing the first song
+        playNextSong();
     }
 
     displayInitialRoom() {
