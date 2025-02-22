@@ -25,3 +25,193 @@ Since this game loads JSON files, you'll need to run it through a local web serv
 - Items to collect and use
 - Various win and death conditions
 - Inventory system
+
+## Creating Your Own Adventure
+
+The game engine is designed to be modular, allowing you to create your own adventures by modifying the JSON configuration files in the `data` folder.
+
+### Configuration Files
+
+1. `config.json` - Game-wide settings and messages
+   ```json
+   {
+     "gameName": "Your Game Name",
+     "welcomeMessage": "Welcome to your adventure!",
+     "startingRoom": "firstRoom",
+     // ...other settings
+   }
+   ```
+
+2. `rooms.json` - Define your game's locations
+   ```json
+   {
+     "firstRoom": {
+       "description": "You find yourself in...",
+       "image": "assets/images/your-room.jpg",
+       "exits": { 
+         "north": "secondRoom",
+         "east": "thirdRoom"
+       },
+       "items": ["key", "note"],
+       "narrationAudio": "assets/sounds/narration/room-audio.mp3",
+       "choices": [
+         "Go north to Second Room",
+         "Go east to Third Room",
+         "Take key",
+         "Take note"
+       ],
+       "requiredItems": {
+         "north": ["key"],
+         "east": ["torch"]
+       },
+       "deathMessages": {
+         "east": "Without light, you fall into a pit!"
+       },
+       "itemUse": {
+         "map": "The map shows a secret passage to the east."
+       }
+     }
+   }
+   ```
+
+3. `items.json` - Define collectible items
+   ```json
+   {
+     "key": {
+       "description": "A rusty old key.",
+       "usableIn": ["lockedRoom"]
+     },
+     "magicRing": {
+       "description": "A ring with protective powers.",
+       "usableFor": ["dragon", "curse"]
+     }
+   }
+   ```
+
+4. `rules.json` - Game logic and special conditions
+   ```json
+   {
+     "roomConditions": {
+       "darkCave": {
+         "enter": {
+           "requires": {
+             "state": "torchLit",
+             "value": true,
+             "message": "Too dark to enter without light."
+           }
+         }
+       }
+     },
+     "itemConditions": {
+       "treasure": {
+         "take": {
+           "requires": {
+             "inventory": "gloves",
+             "failureMessage": "The treasure is too hot to touch!",
+             "gameOver": true
+           }
+         }
+       }
+     },
+     "winConditions": [
+       {
+         "room": "exit",
+         "requires": {
+           "inventory": ["treasure", "map"]
+         },
+         "message": "You escaped with the treasure! You win!"
+       }
+     ]
+   }
+   ```
+
+### Example: Creating a Sci-Fi Adventure
+
+Here's how you might structure a sci-fi adventure:
+
+1. Update `config.json`:
+   ```json
+   {
+     "gameName": "Space Station Alpha",
+     "welcomeMessage": "Welcome to Space Station Alpha. Warning: Life support systems critical.",
+     "startingRoom": "airlock"
+   }
+   ```
+
+2. Add rooms in `rooms.json`:
+   ```json
+   {
+     "airlock": {
+       "description": "You're in the station's airlock. Emergency lights flash red, casting eerie shadows.",
+       "exits": { "north": "corridor" },
+       "items": ["spacesuit"],
+       "choices": ["Go north to Corridor", "Take spacesuit"]
+     },
+     "corridor": {
+       "description": "A long corridor stretches before you. Sparks fly from damaged circuits.",
+       "exits": { 
+         "north": "bridge",
+         "east": "engineering" 
+       },
+       "requiredItems": {
+         "east": ["keycard"]
+       }
+     }
+   }
+   ```
+
+3. Define items in `items.json`:
+   ```json
+   {
+     "spacesuit": {
+       "description": "A pressurized suit for space walks.",
+       "usableIn": ["vacuum"]
+     },
+     "keycard": {
+       "description": "Security clearance card."
+     }
+   }
+   ```
+
+4. Set up rules in `rules.json`:
+   ```json
+   {
+     "roomConditions": {
+       "vacuum": {
+         "enter": {
+           "requires": {
+             "inventory": "spacesuit",
+             "failureMessage": "You're instantly exposed to the vacuum of space. Game Over!",
+             "gameOver": true
+           }
+         }
+       }
+     },
+     "winConditions": [
+       {
+         "room": "escapePod",
+         "requires": {
+           "inventory": ["dataCore"]
+         },
+         "message": "You escape with the vital station data. Mission accomplished!"
+       }
+     ]
+   }
+   ```
+
+### Tips for Creating Adventures
+
+1. Plan your map first - sketch out rooms and connections
+2. Create atmospheric descriptions that fit your theme
+3. Design puzzles around item requirements and room conditions
+4. Test all possible paths through your game
+5. Add appropriate images to `assets/images/` for each room
+6. Record narration audio (optional) and place in `assets/sounds/narration/`
+
+### Required Assets
+
+- Room images should be placed in `assets/images/`
+- Audio narration (optional) goes in `assets/sounds/narration/`
+- Background music (optional) goes in `assets/sounds/`
+
+Images should be in jpg/png format, and audio in mp3/m4a format.
