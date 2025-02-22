@@ -23,5 +23,17 @@
     "cursedTreasure": {
         "description": "Treasure that brings misfortune.",
         "cursed": true
+    },
+    "flint": {
+        "description": "A piece of flint for starting fires.",
+        "usableWith": ["torch"]
+    },
+    "emptyBottle": {
+        "description": "An empty glass bottle that could hold liquids.",
+        "usableWith": ["herbs"]
+    },
+    "herbs": {
+        "description": "Mysterious herbs with potential magical properties.",
+        "usableWith": ["emptyBottle"]
     }
 }
