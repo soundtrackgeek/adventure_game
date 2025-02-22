@@ -212,7 +212,14 @@ class Game {
                 
                 this.gameState.currentRoom = nextRoom;
                 this.displayLocationImage();
-                return `${this.rooms[nextRoom].description}\n\n\nAvailable actions: ${this.rooms[nextRoom].choices.join(', ')}`;
+                
+                // Play narration for the new room
+                const newRoom = this.rooms[nextRoom];
+                if (newRoom.narrationAudio) {
+                    this.playNarration(newRoom.narrationAudio);
+                }
+                
+                return `${newRoom.description}\n\n\nAvailable actions: ${newRoom.choices.join(', ')}`;
             }
         }
         return "You can't go that way.";
@@ -317,6 +324,12 @@ class Game {
         }
         
         description += "\n\n\nAvailable actions: " + currentRoom.choices.join(", ");
+
+        // Play narration when looking around
+        if (currentRoom.narrationAudio) {
+            this.playNarration(currentRoom.narrationAudio);
+        }
+
         return description;
     }
 
@@ -393,10 +406,18 @@ class Game {
             this.audioElement.volume = 0.1;
         }
 
+        // Stop any currently playing narration
+        this.narrationElement.pause();
+        this.narrationElement.currentTime = 0;
+
         this.narrationElement.src = audioPath;
         console.log('Playing narration:', audioPath);
         this.narrationElement.play().catch(error => {
             console.error('Error playing narration:', error, audioPath);
+            // Restore background music volume if narration fails
+            if (this.audioElement) {
+                this.audioElement.volume = 0.3;
+            }
         });
 
         // Restore background music volume when narration ends
