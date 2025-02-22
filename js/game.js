@@ -381,6 +381,7 @@ class Game {
 
     // Helper method to normalize item names
     normalizeItemName(itemName) {
+        // Remove spaces and convert to lowercase
         return itemName.toLowerCase().replace(/\s+/g, '');
     }
 
@@ -393,13 +394,34 @@ class Game {
             return this.config.dontHaveItemMessage;
         }
 
+        // Check for alternative names in combinations
+        const findActualItemName = (itemName) => {
+            for (const combinationKey in this.puzzles.combinations) {
+                const combination = this.puzzles.combinations[combinationKey];
+                if (combination.alternativeNames) {
+                    for (const [actualName, alternatives] of Object.entries(combination.alternativeNames)) {
+                        if (alternatives.includes(itemName.toLowerCase())) {
+                            return actualName;
+                        }
+                    }
+                }
+            }
+            return itemName;
+        };
+
+        // Get actual item names considering alternatives
+        const actualItem1 = findActualItemName(item1);
+        const actualItem2 = findActualItemName(item2);
+
         // Normalize the item names for combination checking
-        const normalizedItem1 = this.normalizeItemName(item1);
-        const normalizedItem2 = this.normalizeItemName(item2);
+        const normalizedItem1 = this.normalizeItemName(actualItem1);
+        const normalizedItem2 = this.normalizeItemName(actualItem2);
 
         // Check all combinations for these items (in either order)
         const combinationId = `${normalizedItem1}_${normalizedItem2}`;
         const reverseCombinationId = `${normalizedItem2}_${normalizedItem1}`;
+
+        // Find the combination that matches either order
         const combination = this.puzzles.combinations[combinationId] || this.puzzles.combinations[reverseCombinationId];
 
         if (!combination) {
