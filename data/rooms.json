@@ -4,6 +4,7 @@
         "image": "assets/images/jungle-clearing.jpg",
         "exits": { "north": "templeEntrance" },
         "items": ["torch"],
+        "narrationAudio": "assets/sounds/narration/jungle-clearing.mp3",
         "choices": ["Go north to the Temple Entrance", "Take torch"]
     },
     "templeEntrance": {
@@ -11,6 +12,7 @@
         "image": "assets/images/temple-entrance.jpg",
         "exits": { "south": "jungleClearing", "north": "hallOfStatues" },
         "items": [],
+        "narrationAudio": "assets/sounds/narration/temple-entrance.mp3",
         "choices": ["Go south to Jungle Clearing", "Go north to Hall of Statues"]
     },
     "hallOfStatues": {
@@ -18,6 +20,7 @@
         "image": "assets/images/hall-of-statues.jpg",
         "exits": { "south": "templeEntrance", "east": "trapRoom", "west": "altarRoom" },
         "items": ["map"],
+        "narrationAudio": "assets/sounds/narration/hall-of-statues.mp3",
         "choices": ["Go south to Temple Entrance", "Go east to Trap Room", "Go west to Altar Room", "Take map"]
     },
     "trapRoom": {
@@ -25,6 +28,7 @@
         "image": "assets/images/trap-room.jpg",
         "exits": { "west": "hallOfStatues", "north": "library", "east": "undergroundTunnel" },
         "items": [],
+        "narrationAudio": "assets/sounds/narration/trap-room.mp3",
         "choices": ["Go west to Hall of Statues", "Go north to Library", "Go east to Underground Tunnel", "Use traps"]
     },
     "library": {
@@ -32,6 +36,7 @@
         "image": "assets/images/library.jpg",
         "exits": { "south": "trapRoom", "east": "treasureRoom" },
         "items": ["key"],
+        "narrationAudio": "assets/sounds/narration/library.mp3",
         "choices": ["Go south to Trap Room", "Go east to Treasure Room", "Take key"]
     },
     "altarRoom": {
@@ -39,6 +44,7 @@
         "image": "assets/images/altar-room.jpg",
         "exits": { "east": "hallOfStatues" },
         "items": ["amulet"],
+        "narrationAudio": "assets/sounds/narration/altar-room.mp3",
         "choices": ["Go east to Hall of Statues", "Take amulet"]
     },
     "undergroundTunnel": {
@@ -46,6 +52,7 @@
         "image": "assets/images/underground-tunnel.jpg",
         "exits": { "west": "trapRoom", "north": "chamberOfIdol" },
         "items": [],
+        "narrationAudio": "assets/sounds/narration/underground-tunnel.mp3",
         "choices": ["Go west to Trap Room", "Go north to Chamber of the Idol"]
     },
     "chamberOfIdol": {
@@ -53,6 +60,7 @@
         "image": "assets/images/chamber-of-idol.jpg",
         "exits": { "south": "undergroundTunnel", "north": "exitPath" },
         "items": ["goldenIdol"],
+        "narrationAudio": "assets/sounds/narration/chamber-of-idol.mp3",
         "choices": [
             "Go south to Underground Tunnel",
             "Go north to Exit Path",
@@ -78,6 +86,7 @@
         "image": "assets/images/treasure-room.jpg",
         "exits": { "west": "library" },
         "items": ["sword", "cursedTreasure"],
+        "narrationAudio": "assets/sounds/narration/treasure-room.mp3",
         "choices": ["Go west to Library", "Take sword", "Take cursed treasure"]
     },
     "exitPath": {
@@ -85,6 +94,7 @@
         "image": "assets/images/exit-path.jpg",
         "exits": { "south": "chamberOfIdol" },
         "items": [],
+        "narrationAudio": "assets/sounds/narration/exit-path.mp3",
         "choices": ["Go south to Chamber of the Idol"]
     }
 }

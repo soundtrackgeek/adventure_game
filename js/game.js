@@ -28,10 +28,14 @@ class Game {
             'Temple of Echoes.m4a'
         ];
         this.audioElement = document.getElementById('bgMusic');
-        if (!this.audioElement) {
-            console.error('Background music element not found');
+        this.narrationElement = document.getElementById('narration');
+        if (!this.audioElement || !this.narrationElement) {
+            console.error('Audio elements not found');
             return;
         }
+
+        // Set background music volume lower
+        this.audioElement.volume = 0.3;
 
         // Set up audio error handling
         this.audioElement.addEventListener('error', (e) => {
@@ -362,5 +366,37 @@ class Game {
             this.gameState.gameOver = true;
             return;
         }
+    }
+
+    displayRoom(roomName) {
+        const room = this.rooms[roomName];
+        if (!room) return false;
+
+        const text = room.description + '\n\n' + 'Available actions: ' + room.choices.join(', ');
+        this.displayText(text);
+        this.displayLocationImage();
+        this.playNarration(room.narrationAudio);
+        return true;
+    }
+
+    playNarration(audioPath) {
+        if (!audioPath || !this.narrationElement) return;
+
+        // Lower background music volume further during narration
+        if (this.audioElement) {
+            this.audioElement.volume = 0.1;
+        }
+
+        this.narrationElement.src = audioPath;
+        this.narrationElement.play().catch(error => {
+            console.error('Error playing narration:', error);
+        });
+
+        // Restore background music volume when narration ends
+        this.narrationElement.onended = () => {
+            if (this.audioElement) {
+                this.audioElement.volume = 0.3;
+            }
+        };
     }
 }
