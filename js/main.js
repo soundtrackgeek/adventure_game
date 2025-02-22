@@ -24,7 +24,10 @@ async function loadGameData() {
         
         // Initialize game after loading data
         game = new Game(rooms, items);
-        game.displayText(`${rooms.jungleClearing.description}<br>Choices: ${rooms.jungleClearing.choices.join(', ')}`);
+        
+        // Display initial game state
+        const initialText = `Welcome to Temple Adventure!\n\n${rooms.jungleClearing.description}\n\nAvailable actions: ${rooms.jungleClearing.choices.join(', ')}\n\nType 'help' for a list of commands.`;
+        game.displayText(initialText);
         game.updateInventory();
 
         // Setup click handler after game is initialized

@@ -8,6 +8,11 @@ class Game {
             gameOver: false,
             torchLit: false
         };
+        // Clear any existing content when game is initialized
+        const output = document.getElementById('output');
+        if (output) {
+            output.innerHTML = '';
+        }
     }
 
     displayText(text) {
