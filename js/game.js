@@ -95,6 +95,7 @@ class Game {
         if (currentRoom) {
             const initialText = `Welcome to Temple Adventure!\n\n\n${currentRoom.description}\n\n\nAvailable actions: ${currentRoom.choices.join(', ')}\n\nType 'help' for a list of commands.`;
             this.displayText(initialText);
+            this.playNarration(currentRoom.narrationAudio);
         } else {
             console.error('Initial room not found:', this.gameState.currentRoom);
         }
@@ -382,14 +383,41 @@ class Game {
     playNarration(audioPath) {
         if (!audioPath || !this.narrationElement) return;
 
-        // Lower background music volume further during narration
+        // Only play narration if we've had user interaction
+        if (!this.musicInitialized) {
+            // Add a one-time click handler to play the initial narration
+            document.addEventListener('click', () => {
+                if (!this.musicInitialized) {
+                    // Lower background music volume during narration
+                    if (this.audioElement) {
+                        this.audioElement.volume = 0.1;
+                    }
+
+                    this.narrationElement.src = audioPath;
+                    this.narrationElement.play().catch(error => {
+                        console.error('Error playing narration:', error, audioPath);
+                    });
+
+                    // Restore background music volume when narration ends
+                    this.narrationElement.onended = () => {
+                        if (this.audioElement) {
+                            this.audioElement.volume = 0.3;
+                        }
+                    };
+                }
+            }, { once: true });
+            return;
+        }
+
+        // Lower background music volume during narration
         if (this.audioElement) {
             this.audioElement.volume = 0.1;
         }
 
         this.narrationElement.src = audioPath;
+        console.log('Playing narration:', audioPath); // Add debug log
         this.narrationElement.play().catch(error => {
-            console.error('Error playing narration:', error);
+            console.error('Error playing narration:', error, audioPath);
         });
 
         // Restore background music volume when narration ends
