@@ -19,14 +19,7 @@ class Game {
         output.innerHTML = '';
         
         // Initialize music system
-        this.songs = [
-            'Ancient Echoes Distort.m4a',
-            'Ancient Echoes Within.m4a',
-            'Ancient Pulse.m4a',
-            'Ancient Transmutation.m4a',
-            'Forgotten Deity.m4a',
-            'Temple of Echoes.m4a'
-        ];
+        this.songs = [];  // Will be populated when music is initialized
         this.audioElement = document.getElementById('bgMusic');
         this.narrationElement = document.getElementById('narration');
         if (!this.audioElement || !this.narrationElement) {
@@ -46,19 +39,43 @@ class Game {
         // Initialize audio systems on first click
         document.addEventListener('click', () => {
             if (!this.musicInitialized) {
-                this.initializeMusic();
-                // Play the initial room's narration after music starts
-                const currentRoom = this.rooms[this.gameState.currentRoom];
-                if (currentRoom && currentRoom.narrationAudio) {
-                    this.playNarration(currentRoom.narrationAudio);
-                }
-                this.musicInitialized = true;
+                this.loadMusicFiles().then(() => {
+                    this.initializeMusic();
+                    // Play the initial room's narration after music starts
+                    const currentRoom = this.rooms[this.gameState.currentRoom];
+                    if (currentRoom && currentRoom.narrationAudio) {
+                        this.playNarration(currentRoom.narrationAudio);
+                    }
+                    this.musicInitialized = true;
+                });
             }
-        }, { once: true });  // Changed to once: true since we only need this once
+        }, { once: true });
 
         // Show initial room description
         this.displayInitialRoom();
         this.displayLocationImage();
+    }
+
+    async loadMusicFiles() {
+        try {
+            const response = await fetch('assets/sounds/');
+            const text = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(text, 'text/html');
+            const links = doc.getElementsByTagName('a');
+            
+            this.songs = Array.from(links)
+                .map(link => link.href)
+                .filter(href => href.endsWith('.m4a'))
+                .map(href => href.split('/').pop())
+                .filter(filename => !filename.includes('narration'));
+
+            if (this.songs.length === 0) {
+                console.warn('No music files found in assets/sounds/');
+            }
+        } catch (error) {
+            console.error('Error loading music files:', error);
+        }
     }
 
     initializeMusic() {
