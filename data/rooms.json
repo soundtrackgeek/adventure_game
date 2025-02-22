@@ -45,9 +45,24 @@
         "description": "At last, you reach the heart of the temple: a cavernous chamber where the legendary Golden Idol sits atop a pedestal, bathed in a shaft of otherworldly light. A menacing temple guardian blocks your path, wielding an ancient blade. You'll need a weapon to face this formidable opponent.",
         "exits": { "south": "undergroundTunnel", "north": "exitPath" },
         "items": ["goldenIdol"],
-        "choices": ["Go south to Underground Tunnel", "Go north to Exit Path", "Take golden idol"],
+        "choices": [
+            "Go south to Underground Tunnel",
+            "Go north to Exit Path",
+            "Take golden idol",
+            "Use sword"
+        ],
         "requiredItems": {
-            "goldenIdol": ["sword"]
+            "goldenIdol": ["sword"],
+            "north": ["sword"],
+            "exitPath": ["sword"]
+        },
+        "deathMessages": {
+            "goldenIdol": "As you reach for the Golden Idol, the temple guardian strikes you down with his ancient blade. You should have brought a weapon to defend yourself!",
+            "north": "The temple guardian blocks your path and strikes you down with his blade. You need a weapon to get past him!",
+            "exitPath": "The temple guardian blocks your path and strikes you down with his blade. You need a weapon to get past him!"
+        },
+        "itemUse": {
+            "sword": "You engage in an epic battle with the temple guardian. Your sword clashes against his blade in a shower of sparks. After a fierce duel, you emerge victorious! The guardian falls, and the path to the Golden Idol is clear."
         }
     },
     "treasureRoom": {
