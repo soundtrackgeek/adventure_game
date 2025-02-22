@@ -23,7 +23,7 @@ class Game {
     displayInitialRoom() {
         const currentRoom = this.rooms[this.gameState.currentRoom];
         if (currentRoom) {
-            const initialText = `Welcome to Temple Adventure!\n\n${currentRoom.description}\n\nAvailable actions: ${currentRoom.choices.join(', ')}\n\nType 'help' for a list of commands.`;
+            const initialText = `Welcome to Temple Adventure!\n\n\n${currentRoom.description}\n\n\nAvailable actions: ${currentRoom.choices.join(', ')}\n\nType 'help' for a list of commands.`;
             this.displayText(initialText);
         } else {
             console.error('Initial room not found:', this.gameState.currentRoom);
