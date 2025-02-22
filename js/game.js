@@ -113,7 +113,7 @@ class Game {
                 }
                 
                 this.gameState.currentRoom = nextRoom;
-                return `${this.rooms[nextRoom].description}\nChoices: ${this.rooms[nextRoom].choices.join(', ')}`;
+                return `${this.rooms[nextRoom].description}\n\n\nAvailable actions: ${this.rooms[nextRoom].choices.join(', ')}`;
             }
         }
         return "You can't go that way.";
@@ -201,7 +201,7 @@ class Game {
             description += "\nYou see: " + currentRoom.items.join(", ");
         }
         
-        description += "\nChoices: " + currentRoom.choices.join(", ");
+        description += "\n\n\nAvailable actions: " + currentRoom.choices.join(", ");
         return description;
     }
 
