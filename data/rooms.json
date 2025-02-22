@@ -42,10 +42,13 @@
         "choices": ["Go west to Trap Room", "Go north to Chamber of the Idol"]
     },
     "chamberOfIdol": {
-        "description": "At last, you reach the heart of the temple: a cavernous chamber where the legendary Golden Idol sits atop a pedestal, bathed in a shaft of otherworldly light. But you’re not alone. A shadowy figure lurks in the periphery, its eyes glinting with malice. The air crackles with tension; one wrong move could spell disaster.",
+        "description": "At last, you reach the heart of the temple: a cavernous chamber where the legendary Golden Idol sits atop a pedestal, bathed in a shaft of otherworldly light. A menacing temple guardian blocks your path, wielding an ancient blade. You'll need a weapon to face this formidable opponent.",
         "exits": { "south": "undergroundTunnel", "north": "exitPath" },
         "items": ["goldenIdol"],
-        "choices": ["Go south to Underground Tunnel", "Go north to Exit Path", "Take golden idol"]
+        "choices": ["Go south to Underground Tunnel", "Go north to Exit Path", "Take golden idol"],
+        "requiredItems": {
+            "goldenIdol": ["sword"]
+        }
     },
     "treasureRoom": {
         "description": "You stumble into a chamber that glitters with unimaginable wealth. Piles of gold coins spill from chests, and jewels of every hue sparkle in the dim light. In the corner, half-buried under a mound of treasure, lies a magnificent sword, its blade etched with runes that hint at its power. But beware, for such riches often come with a curse.",
