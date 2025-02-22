@@ -51,7 +51,7 @@
         "description": "A room filled with gold and jewels, and a sword in the corner.",
         "exits": { "west": "library" },
         "items": ["sword", "cursedTreasure"],
-        "choices": ["Go west to Library", "Take sword", "Take cursedTreasure"]
+        "choices": ["Go west to Library", "Take sword", "Take cursed treasure"]
     },
     "exitPath": {
         "description": "A path leading out of the temple back to the jungle.",
