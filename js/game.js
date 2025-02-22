@@ -317,11 +317,8 @@ class Game {
 
     handleUse(itemName) {
         if (!itemName) {
-            this.debugLog('handleUse called with no itemName');
             return this.config.invalidItemMessage;
         }
-
-        this.debugLog('handleUse called with:', { itemName });
 
         // Check if trying to combine items (format: "use item1 with/and item2")
         const withIndex = itemName.indexOf(" with ");
@@ -334,8 +331,6 @@ class Game {
             const item1Text = itemName.substring(0, separatorIndex);
             const item2Text = itemName.substring(separatorIndex + separator.length);
             
-            this.debugLog('Attempting to combine items:', { item1Text, item2Text });
-            
             // Find actual item names from inventory that match when normalized
             const item1 = this.gameState.inventory.find(item => 
                 this.normalizeItemName(item) === this.normalizeItemName(item1Text)
@@ -343,14 +338,6 @@ class Game {
             const item2 = this.gameState.inventory.find(item => 
                 this.normalizeItemName(item) === this.normalizeItemName(item2Text)
             );
-            
-            this.debugLog('Found inventory items:', { 
-                item1, 
-                item2, 
-                inventory: this.gameState.inventory,
-                normalizedItem1Text: this.normalizeItemName(item1Text),
-                normalizedItem2Text: this.normalizeItemName(item2Text)
-            });
             
             if (item1 && item2) {
                 return this.handleCombination(item1, item2);
@@ -403,19 +390,11 @@ class Game {
     }
 
     handleCombination(item1, item2) {
-        this.debugLog('handleCombination called with:', { item1, item2 });
-
         if (!this.puzzles?.combinations) {
-            this.debugLog('No combinations found in puzzles');
             return "Item combination is not possible.";
         }
 
         if (!this.gameState.inventory.includes(item1) || !this.gameState.inventory.includes(item2)) {
-            this.debugLog('Items not in inventory:', { 
-                inventory: this.gameState.inventory,
-                item1InInventory: this.gameState.inventory.includes(item1),
-                item2InInventory: this.gameState.inventory.includes(item2)
-            });
             return this.config.dontHaveItemMessage;
         }
 
@@ -426,7 +405,6 @@ class Game {
                 if (combination.alternativeNames) {
                     for (const [actualName, alternatives] of Object.entries(combination.alternativeNames)) {
                         if (alternatives.includes(itemName.toLowerCase())) {
-                            this.debugLog(`Found alternative name for ${itemName}:`, { actualName });
                             return actualName;
                         }
                     }
@@ -438,34 +416,21 @@ class Game {
         // Get actual item names considering alternatives
         const actualItem1 = findActualItemName(item1);
         const actualItem2 = findActualItemName(item2);
-        
-        this.debugLog('Actual item names:', { actualItem1, actualItem2 });
 
         // Normalize the item names for combination checking
         const normalizedItem1 = this.normalizeItemName(actualItem1);
         const normalizedItem2 = this.normalizeItemName(actualItem2);
-        
-        this.debugLog('Normalized item names:', { normalizedItem1, normalizedItem2 });
 
         // Check all combinations for these items (in either order)
         const combinationId = `${normalizedItem1}_${normalizedItem2}`;
         const reverseCombinationId = `${normalizedItem2}_${normalizedItem1}`;
-        
-        this.debugLog('Checking combination IDs:', { 
-            combinationId, 
-            reverseCombinationId,
-            availableCombinations: Object.keys(this.puzzles.combinations)
-        });
 
         // Find the combination that matches either order
         const combination = this.puzzles.combinations[combinationId] || this.puzzles.combinations[reverseCombinationId];
 
         if (!combination) {
-            this.debugLog('No matching combination found');
             return "Those items cannot be combined.";
         }
-
-        this.debugLog('Found matching combination:', { combination });
 
         // Remove ingredients if specified
         if (combination.removeIngredients) {
@@ -634,37 +599,5 @@ class Game {
                 this.audioElement.volume = this.config.bgMusicVolume;
             }
         };
-    }
-
-    debugLog(message, data = null) {
-        const timestamp = new Date().toISOString();
-        const logMessage = `${timestamp} - ${message}${data ? '\nData: ' + JSON.stringify(data, null, 2) : ''}\n`;
-        
-        // Write to debug.log file
-        const encoder = new TextEncoder();
-        const data_to_write = encoder.encode(logMessage);
-        
-        try {
-            window.logFileHandle = window.logFileHandle || new Promise((resolve) => {
-                resolve(window.showSaveFilePicker({
-                    suggestedName: 'debug.log',
-                    types: [{
-                        description: 'Log File',
-                        accept: { 'text/plain': ['.log'] },
-                    }],
-                }));
-            });
-            
-            window.logFileHandle.then(async (handle) => {
-                const writable = await handle.createWritable({ keepExistingData: true });
-                await writable.seek((await handle.getFile()).size);
-                await writable.write(data_to_write);
-                await writable.close();
-            });
-        } catch (err) {
-            console.error('Failed to write to debug.log:', err);
-            // Fallback to console
-            console.log(logMessage);
-        }
     }
 }
