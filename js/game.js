@@ -125,22 +125,24 @@ class Game {
         }
 
         const currentRoom = this.rooms[this.gameState.currentRoom];
-        const itemIndex = currentRoom.items.indexOf(itemName);
+        // Convert item names to lowercase for comparison
+        const itemIndex = currentRoom.items.findIndex(item => item.toLowerCase() === itemName.toLowerCase());
         
         if (itemIndex !== -1) {
+            const actualItemName = currentRoom.items[itemIndex];  // Use the actual cased name
             // Special case for cursed items
-            if (itemName === 'goldenIdol' && !this.gameState.inventory.includes('amulet')) {
+            if (actualItemName === 'goldenIdol' && !this.gameState.inventory.includes('amulet')) {
                 this.gameState.gameOver = true;
                 return "As you touch the Golden Idol, its curse consumes you. You're dead!";
             }
-            if (itemName === 'cursedTreasure' && !this.gameState.inventory.includes('amulet')) {
+            if (actualItemName === 'cursedTreasure' && !this.gameState.inventory.includes('amulet')) {
                 this.gameState.gameOver = true;
                 return "The cursed treasure drains your life force. You're dead!";
             }
 
             currentRoom.items.splice(itemIndex, 1);
-            this.gameState.inventory.push(itemName);
-            return `You take the ${itemName}.`;
+            this.gameState.inventory.push(actualItemName);
+            return `You take the ${actualItemName}.`;
         }
         return "There's no such item here.";
     }
@@ -163,12 +165,10 @@ class Game {
 
         switch(itemName) {
             case 'torch':
-                if (currentRoom === 'undergroundTunnel' || 
-                    this.rooms[currentRoom].exits.undergroundTunnel) {
-                    this.gameState.torchLit = true;
-                    return "You light the torch, illuminating the darkness ahead.";
-                }
-                return "You don't need to use the torch here.";
+                this.gameState.torchLit = !this.gameState.torchLit;
+                return this.gameState.torchLit ? 
+                    "You light the torch, illuminating your surroundings." : 
+                    "You extinguish the torch.";
             
             case 'key':
                 if (currentRoom === 'treasureRoom') {
