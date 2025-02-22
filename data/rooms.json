@@ -1,0 +1,62 @@
+{
+    "jungleClearing": {
+        "description": "You stand in a dense jungle clearing. An ancient temple looms ahead.",
+        "exits": { "north": "templeEntrance" },
+        "items": ["torch"],
+        "choices": ["Go north to the Temple Entrance", "Take torch"]
+    },
+    "templeEntrance": {
+        "description": "The grand entrance of the temple. Stone carvings depict ancient rituals.",
+        "exits": { "south": "jungleClearing", "north": "hallOfStatues" },
+        "items": [],
+        "choices": ["Go south to Jungle Clearing", "Go north to Hall of Statues"]
+    },
+    "hallOfStatues": {
+        "description": "A hall filled with statues of warriors. One holds a map.",
+        "exits": { "south": "templeEntrance", "east": "trapRoom", "west": "altarRoom" },
+        "items": ["map"],
+        "choices": ["Go south to Temple Entrance", "Go east to Trap Room", "Go west to Altar Room", "Take map"]
+    },
+    "trapRoom": {
+        "description": "This room is filled with deadly traps. Tread carefully.",
+        "exits": { "west": "hallOfStatues", "north": "library", "east": "undergroundTunnel" },
+        "items": [],
+        "choices": ["Go west to Hall of Statues", "Go north to Library", "Go east to Underground Tunnel", "Cross traps"]
+    },
+    "library": {
+        "description": "An ancient library with dusty scrolls. A key rests on a shelf.",
+        "exits": { "south": "trapRoom", "east": "treasureRoom" },
+        "items": ["key"],
+        "choices": ["Go south to Trap Room", "Go east to Treasure Room", "Take key"]
+    },
+    "altarRoom": {
+        "description": "A room with an altar covered in symbols. An amulet glows faintly.",
+        "exits": { "east": "hallOfStatues" },
+        "items": ["amulet"],
+        "choices": ["Go east to Hall of Statues", "Take amulet"]
+    },
+    "undergroundTunnel": {
+        "description": "A dark tunnel leading deeper into the temple.",
+        "exits": { "west": "trapRoom", "north": "chamberOfIdol" },
+        "items": [],
+        "choices": ["Go west to Trap Room", "Go north to Chamber of the Idol"]
+    },
+    "chamberOfIdol": {
+        "description": "The Golden Idol rests on a pedestal, guarded by a shadowy figure.",
+        "exits": { "south": "undergroundTunnel", "north": "exitPath" },
+        "items": ["goldenIdol"],
+        "choices": ["Go south to Underground Tunnel", "Go north to Exit Path", "Take golden idol"]
+    },
+    "treasureRoom": {
+        "description": "A room filled with gold and jewels, and a sword in the corner.",
+        "exits": { "west": "library" },
+        "items": ["sword", "cursedTreasure"],
+        "choices": ["Go west to Library", "Take sword", "Take cursed treasure"]
+    },
+    "exitPath": {
+        "description": "A path leading out of the temple back to the jungle.",
+        "exits": { "south": "chamberOfIdol" },
+        "items": [],
+        "choices": ["Go south to Chamber of the Idol"]
+    }
+}

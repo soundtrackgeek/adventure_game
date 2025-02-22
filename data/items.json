@@ -1,0 +1,27 @@
+{
+    "torch": {
+        "description": "A torch to light dark areas.",
+        "usableIn": ["undergroundTunnel"]
+    },
+    "key": {
+        "description": "A key to unlock doors."
+    },
+    "amulet": {
+        "description": "Protects against curses.",
+        "usableFor": ["goldenIdol", "cursedTreasure"]
+    },
+    "sword": {
+        "description": "A sharp sword for defense."
+    },
+    "map": {
+        "description": "A map of the temple."
+    },
+    "goldenIdol": {
+        "description": "The priceless Golden Idol.",
+        "winCondition": true
+    },
+    "cursedTreasure": {
+        "description": "Treasure that brings misfortune.",
+        "cursed": true
+    }
+}
