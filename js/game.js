@@ -323,12 +323,16 @@ class Game {
 
         this.debugLog('handleUse called with:', { itemName });
 
-        // Check if trying to combine items (format: "use item1 with item2")
+        // Check if trying to combine items (format: "use item1 with/and item2")
         const withIndex = itemName.indexOf(" with ");
-        if (withIndex !== -1) {
+        const andIndex = itemName.indexOf(" and ");
+        const separator = withIndex !== -1 ? " with " : andIndex !== -1 ? " and " : null;
+        const separatorIndex = withIndex !== -1 ? withIndex : andIndex;
+
+        if (separator) {
             // Get the full item names before normalizing
-            const item1Text = itemName.substring(0, withIndex);
-            const item2Text = itemName.substring(withIndex + 6);
+            const item1Text = itemName.substring(0, separatorIndex);
+            const item2Text = itemName.substring(separatorIndex + separator.length);
             
             this.debugLog('Attempting to combine items:', { item1Text, item2Text });
             
