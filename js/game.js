@@ -421,12 +421,17 @@ class Game {
         const normalizedItem1 = this.normalizeItemName(actualItem1);
         const normalizedItem2 = this.normalizeItemName(actualItem2);
 
-        // Check all combinations for these items (in either order)
-        const combinationId = `${normalizedItem1}_${normalizedItem2}`;
-        const reverseCombinationId = `${normalizedItem2}_${normalizedItem1}`;
-
-        // Find the combination that matches either order
-        const combination = this.puzzles.combinations[combinationId] || this.puzzles.combinations[reverseCombinationId];
+        // Instead of directly accessing the combination by key, iterate to match normalized keys
+        const targetKey1 = `${normalizedItem1}_${normalizedItem2}`;
+        const targetKey2 = `${normalizedItem2}_${normalizedItem1}`;
+        let combination = null;
+        for (const key in this.puzzles.combinations) {
+            const normalizedKey = key.toLowerCase().replace(/\s+/g, '');
+            if (normalizedKey === targetKey1 || normalizedKey === targetKey2) {
+                combination = this.puzzles.combinations[key];
+                break;
+            }
+        }
 
         if (!combination) {
             return "Those items cannot be combined.";
