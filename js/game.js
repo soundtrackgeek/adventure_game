@@ -577,17 +577,22 @@ class Game {
         if (!npcId) {
             return "Who do you want to talk to?";
         }
+        // Remove a leading "to" if present
+        npcId = npcId.replace(/^to\s+/, '');
 
         const normalizedNpcId = this.normalizeItemName(npcId);
-        const dialogue = this.dialogues[normalizedNpcId];
-        
-        if (!dialogue) {
+        let dialogueKey = null;
+        for (const key in this.dialogues) {
+            if (this.normalizeItemName(key) === normalizedNpcId) {
+                dialogueKey = key;
+                break;
+            }
+        }
+        if (!dialogueKey) {
             return "You can't talk to that.";
         }
-
-        this.gameState.currentDialogue = normalizedNpcId;
-        this.gameState.currentDialogueNode = dialogue.initialNode;
-        
+        this.gameState.currentDialogue = dialogueKey;
+        this.gameState.currentDialogueNode = this.dialogues[dialogueKey].initialNode;
         return this.displayDialogueNode();
     }
 
