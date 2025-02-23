@@ -1,2 +1,5 @@
 # ignore the ideas.md as it is ideas on how to improve the project
 ideas.md
+
+# Don't include data_examples folder. That is just for testing purposes
+data_examples/
