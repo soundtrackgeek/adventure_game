@@ -6,34 +6,42 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Adventure Game</title>
+    <title>Adventure Games</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <audio id="bgMusic" style="display: none"></audio>
     <audio id="narration" style="display: none"></audio>
     <div class="game-container">
-        <h1 id="gameTitle">Adventure Game</h1>
-        <div class="game-info">
-            <div class="mini-map">
-                <h3>Mini-Map</h3>
-                <div id="mapContainer"></div>
+        <h1 id="gameTitle">Adventure Games</h1>
+        <div id="game-select" class="game-select">
+            <h2>Select a Game</h2>
+            <div id="gamesList" class="games-list">
+                <!-- Games will be loaded here dynamically -->
             </div>
-            <div class="progress-container">
-                <h3>Progress</h3>
-                <div class="progress-bar">
-                    <div id="progressFill"></div>
-                </div>
-                <div id="progressText">0% Complete</div>
-            </div>
-            <div id="inventory" class="inventory">Inventory: <span id="inventoryList"></span></div>
         </div>
-        <div class="game-main">
-            <div id="locationImage" class="location-image"></div>
-            <div id="output" class="output"></div>
-            <div class="input-area">
-                <input type="text" id="commandInput" placeholder="Enter command (e.g., go north, take torch, use key)">
-                <button>Submit</button>
+        <div id="game-interface" class="game-interface" style="display: none">
+            <div class="game-info">
+                <div class="mini-map">
+                    <h3>Mini-Map</h3>
+                    <div id="mapContainer"></div>
+                </div>
+                <div class="progress-container">
+                    <h3>Progress</h3>
+                    <div class="progress-bar">
+                        <div id="progressFill"></div>
+                    </div>
+                    <div id="progressText">0% Complete</div>
+                </div>
+                <div id="inventory" class="inventory">Inventory: <span id="inventoryList"></span></div>
+            </div>
+            <div class="game-main">
+                <div id="locationImage" class="location-image"></div>
+                <div id="output" class="output"></div>
+                <div class="input-area">
+                    <input type="text" id="commandInput" placeholder="Enter command (e.g., go north, take torch, use key)">
+                    <button>Submit</button>
+                </div>
             </div>
         </div>
     </div>

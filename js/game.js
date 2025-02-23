@@ -1,7 +1,8 @@
 class Game {
-    constructor(rooms, items) {
+    constructor(rooms, items, gameId) {
         this.rooms = rooms;
         this.items = items;
+        this.gameId = gameId; // Store the game ID for asset paths
         this.config = null;
         this.rules = null;
         this.puzzles = null;
@@ -49,11 +50,12 @@ class Game {
 
     async loadConfigurations() {
         try {
+            const basePath = `games/${this.gameId}/data`;
             const [configResponse, rulesResponse, puzzlesResponse, dialoguesResponse] = await Promise.all([
-                fetch('data/config.json'),
-                fetch('data/rules.json'),
-                fetch('data/puzzles.json'),
-                fetch('data/dialogues.json')
+                fetch(`${basePath}/config.json`),
+                fetch(`${basePath}/rules.json`),
+                fetch(`${basePath}/puzzles.json`),
+                fetch(`${basePath}/dialogues.json`)
             ]);
             this.config = await configResponse.json();
             this.rules = await rulesResponse.json();
@@ -104,7 +106,8 @@ class Game {
 
     async loadMusicFiles() {
         try {
-            const response = await fetch('assets/sounds/');
+            // Update music files path to use gameId
+            const response = await fetch(`games/${this.gameId}/assets/sounds/`);
             const text = await response.text();
             const parser = new DOMParser();
             const doc = parser.parseFromString(text, 'text/html');
@@ -146,7 +149,7 @@ class Game {
             this.gameState.playedSongs.push(selectedSong);
             
             // Play the song
-            this.audioElement.src = `assets/sounds/${selectedSong}`;
+            this.audioElement.src = `games/${this.gameId}/assets/sounds/${selectedSong}`;
             this.audioElement.play().catch(error => {
                 console.error('Error playing audio:', error);
             });
@@ -184,7 +187,9 @@ class Game {
         if (currentRoom && currentRoom.image) {
             const imageContainer = document.getElementById('locationImage');
             if (imageContainer) {
-                imageContainer.innerHTML = `<img src="${currentRoom.image}" alt="Location: ${this.gameState.currentRoom}">`;
+                // Update image path to use gameId
+                const imagePath = currentRoom.image.replace('assets/', `games/${this.gameId}/assets/`);
+                imageContainer.innerHTML = `<img src="${imagePath}" alt="Location: ${this.gameState.currentRoom}">`;
             }
         }
     }
@@ -704,10 +709,12 @@ class Game {
         this.narrationElement.pause();
         this.narrationElement.currentTime = 0;
 
-        this.narrationElement.src = audioPath;
-        console.log('Playing narration:', audioPath);
+        // Update audio path to use gameId
+        const narrationPath = audioPath.replace('assets/', `games/${this.gameId}/assets/`);
+        this.narrationElement.src = narrationPath;
+        console.log('Playing narration:', narrationPath);
         this.narrationElement.play().catch(error => {
-            console.error('Error playing narration:', error, audioPath);
+            console.error('Error playing narration:', error, narrationPath);
             // Restore background music volume if narration fails
             if (this.audioElement) {
                 this.audioElement.volume = this.config.bgMusicVolume;
