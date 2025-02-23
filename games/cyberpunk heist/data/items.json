@@ -1,0 +1,35 @@
+{
+    "hackersLaptop": {
+      "description": "A high-powered laptop loaded with hacking tools."
+    },
+    "keycard": {
+      "description": "Grants basic access to restricted floors."
+    },
+    "dataChip": {
+      "description": "The prototype AI chip you're here to steal.",
+      "winCondition": true
+    },
+    "empGrenade": {
+      "description": "Disables electronics temporarily.",
+      "usableIn": ["researchLabB"]
+    },
+    "droneJammer": {
+      "description": "Jams security drone signals."
+    },
+    "smartGlasses": {
+      "description": "AR glasses for enhanced hacking.",
+      "usableWith": ["hackersLaptop"]
+    },
+    "nanotechRepairKit": {
+      "description": "Repairs gear or heals minor injuries."
+    },
+    "cloakingDevice": {
+      "description": "Renders you invisible to cameras briefly."
+    },
+    "laserCutter": {
+      "description": "Cuts through metal barriers."
+    },
+    "biometricSpoofer": {
+      "description": "Bypasses biometric security checks."
+    }
+  }

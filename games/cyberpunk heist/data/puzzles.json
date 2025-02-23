@@ -1,0 +1,17 @@
+{
+    "combinations": {
+      "laptop_glasses": {
+        "ingredients": ["hackersLaptop", "smartGlasses"],
+        "result": "augmentedLaptop",
+        "message": "You sync the glasses with the laptop, boosting its hacking power.",
+        "removeIngredients": true
+      }
+    },
+    "sequences": {
+      "serverHack": {
+        "requiredSequence": ["scanNetwork", "bypassFirewall", "grantAccess"],
+        "message": "Access granted to all floors!",
+        "setState": { "accessGranted": true }
+      }
+    }
+  }

@@ -1,0 +1,73 @@
+{
+    "receptionist": {
+      "name": "Receptionist",
+      "initialNode": "greeting",
+      "nodes": {
+        "greeting": {
+          "text": "ID, please. No visitors without clearance.",
+          "options": [
+            {"text": "I'm here for a delivery.", "nextNode": "delivery"},
+            {"text": "I'll come back later.", "nextNode": "end"}
+          ]
+        },
+        "delivery": {
+          "text": "Drop it at the desk and leave. No wandering.",
+          "options": [{"text": "Got it, thanks.", "nextNode": "end"}]
+        },
+        "end": {
+          "text": "Move along, then.",
+          "options": []
+        }
+      }
+    },
+    "janitor": {
+      "name": "Janitor",
+      "initialNode": "greeting",
+      "nodes": {
+        "greeting": {
+          "text": "Hey, you’re not supposed to be here.",
+          "options": [
+            {"text": "Looking for a shortcut upstairs.", "nextNode": "shortcut"},
+            {"text": "Sorry, wrong room.", "nextNode": "end"}
+          ]
+        },
+        "shortcut": {
+          "text": "Maintenance tunnels might work, but you’ll need clearance or a hack.",
+          "options": [{"text": "Thanks for the tip.", "nextNode": "end"}]
+        },
+        "end": {
+          "text": "Keep it quiet, yeah?",
+          "options": []
+        }
+      }
+    },
+    "securityGuard": {
+      "name": "Security Guard",
+      "initialNode": "greeting",
+      "nodes": {
+        "greeting": {
+          "text": "State your business or get out.",
+          "options": [
+            {"text": "I’m with IT, checking systems.", "nextNode": "bluff"},
+            {"text": "Just passing through.", "nextNode": "end"}
+          ]
+        },
+        "bluff": {
+          "text": "Show me your badge, then.",
+          "options": [
+            {"text": "Uh, must’ve left it downstairs.", "nextNode": "fail"},
+            {"text": "Never mind, I’ll go.", "nextNode": "end"}
+          ]
+        },
+        "fail": {
+          "text": "No badge, no entry. Alarms going off in 3… 2…",
+          "options": [],
+          "setState": { "alarmTriggered": true }
+        },
+        "end": {
+          "text": "Beat it, punk.",
+          "options": []
+        }
+      }
+    }
+  }

@@ -1,0 +1,73 @@
+{
+    "roomConditions": {
+      "elevatorLobby": {
+        "exit": {
+          "up": {
+            "requires": {
+              "inventory": "keycard",
+              "message": "You need a keycard to use the elevator."
+            },
+            "gameOver": true
+          }
+        }
+      },
+      "networkingCloset": {
+        "exit": {
+          "up": {
+            "requires": {
+              "state": "accessGranted",
+              "value": true,
+              "message": "Upper floors are locked without higher access."
+            },
+            "gameOver": false
+          }
+        }
+      }
+    },
+    "itemConditions": {
+      "dataChip": {
+        "take": {
+          "requires": {
+            "inventory": "biometricSpoofer",
+            "failureMessage": "The scanner triggers an alarm. Drones take you out.",
+            "gameOver": true
+          },
+          "alternative": {
+            "state": "camerasDisabled",
+            "value": true,
+            "message": "With cameras off, you grab the chip safely."
+          }
+        }
+      }
+    },
+    "specialActions": {
+      "researchLabB": {
+        "use": {
+          "empGrenade": {
+            "message": "The EMP disables nearby drones, clearing your path.",
+            "setState": { "dronesDisabled": true }
+          }
+        }
+      }
+    },
+    "winConditions": [
+      {
+        "room": "rooftopHelipad",
+        "requires": {
+          "inventory": ["dataChip"]
+        },
+        "message": "You board the chopper with the chip and escape. Victory!"
+      }
+    ],
+    "deathConditions": [
+      {
+        "room": "any",
+        "when": {
+          "state": "alarmTriggered",
+          "value": true
+        },
+        "chance": 1.0,
+        "message": "Alarms blare. Security drones neutralize you. Game over."
+      }
+    ]
+  }
