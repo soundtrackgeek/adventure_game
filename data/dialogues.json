@@ -1,0 +1,73 @@
+{
+    "elderStatue": {
+        "name": "Elder Statue",
+        "initialNode": "greeting",
+        "nodes": {
+            "greeting": {
+                "text": "The ancient statue's eyes flicker with an ethereal light. A deep voice echoes in your mind.",
+                "options": [
+                    {
+                        "text": "Ask about the temple",
+                        "nextNode": "temple_info"
+                    },
+                    {
+                        "text": "Ask about the treasures",
+                        "nextNode": "treasure_info"
+                    },
+                    {
+                        "text": "Leave the conversation",
+                        "nextNode": "end"
+                    }
+                ]
+            },
+            "temple_info": {
+                "text": "This temple was built eons ago to protect powerful artifacts. Many have tried to claim them, but the temple's guardians remain vigilant.",
+                "options": [
+                    {
+                        "text": "Ask about the guardians",
+                        "nextNode": "guardian_info"
+                    },
+                    {
+                        "text": "Return to previous topics",
+                        "nextNode": "greeting"
+                    }
+                ]
+            },
+            "guardian_info": {
+                "text": "We are the eternal watchers, enchanted statues empowered by ancient magic. We test those who seek the temple's secrets.",
+                "options": [
+                    {
+                        "text": "Return to previous topics",
+                        "nextNode": "greeting"
+                    }
+                ]
+            },
+            "treasure_info": {
+                "text": "The temple holds many treasures, but the golden idol is the most precious. However, it is protected by powerful magic.",
+                "options": [
+                    {
+                        "text": "Ask about the protection",
+                        "nextNode": "protection_info"
+                    },
+                    {
+                        "text": "Return to previous topics",
+                        "nextNode": "greeting"
+                    }
+                ]
+            },
+            "protection_info": {
+                "text": "Only those who prove themselves worthy may touch the idol. The amulet of protection is required, else the idol's magic will prove... fatal.",
+                "options": [
+                    {
+                        "text": "Return to previous topics",
+                        "nextNode": "greeting"
+                    }
+                ]
+            },
+            "end": {
+                "text": "The statue's eyes dim as it returns to its silent vigil.",
+                "options": []
+            }
+        }
+    }
+}

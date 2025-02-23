@@ -16,12 +16,13 @@
         "choices": ["Go south to Jungle Clearing", "Go north to Hall of Statues"]
     },
     "hallOfStatues": {
-        "description": "You enter a vast hall, its walls lined with imposing statues of warriors, each one unique in its armor and weaponry, frozen in time. Their stony gazes seem to follow you as you move. In the center, one statue stands out, its hand outstretched, holding what appears to be an ancient map, yellowed with age and covered in cryptic symbols.",
+        "description": "You enter a vast hall, its walls lined with imposing statues of warriors, each one unique in its armor and weaponry, frozen in time. Their stony gazes seem to follow you as you move. In the center, one statue stands out - an Elder Statue with glowing eyes that seems more aware than the others, its hand outstretched, holding what appears to be an ancient map, yellowed with age and covered in cryptic symbols.",
         "image": "assets/images/hall-of-statues.jpg",
         "exits": { "south": "templeEntrance", "east": "trapRoom", "west": "altarRoom" },
         "items": ["map"],
         "narrationAudio": "assets/sounds/narration/hall-of-statues.mp3",
-        "choices": ["Go south to Temple Entrance", "Go east to Trap Room", "Go west to Altar Room", "Take map"]
+        "choices": ["Go south to Temple Entrance", "Go east to Trap Room", "Go west to Altar Room", "Take map", "Talk to elder statue"],
+        "npcs": ["elderStatue"]
     },
     "trapRoom": {
         "description": "As you step into this chamber, a sense of dread washes over you. The floor is a mosaic of pressure plates, and the walls are pockmarked with holes that could conceal darts or worse. Spears protrude from the ground at odd angles, and the faint click of mechanisms echoes ominously. Every step here could be your last; caution is your only ally.",

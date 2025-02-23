@@ -5,6 +5,7 @@ class Game {
         this.config = null;
         this.rules = null;
         this.puzzles = null;
+        this.dialogues = null;
         this.gameState = {
             currentRoom: null,
             inventory: [],
@@ -15,7 +16,9 @@ class Game {
             sequenceProgress: {},
             visitedRooms: new Set(), // Track visited rooms
             totalItems: 0, // Track total collectible items
-            collectedItems: 0 // Track collected items
+            collectedItems: 0, // Track collected items
+            currentDialogue: null,
+            currentDialogueNode: null
         };
 
         // Room positions for the mini-map (percentage-based)
@@ -51,14 +54,16 @@ class Game {
 
     async loadConfigurations() {
         try {
-            const [configResponse, rulesResponse, puzzlesResponse] = await Promise.all([
+            const [configResponse, rulesResponse, puzzlesResponse, dialoguesResponse] = await Promise.all([
                 fetch('data/config.json'),
                 fetch('data/rules.json'),
-                fetch('data/puzzles.json')
+                fetch('data/puzzles.json'),
+                fetch('data/dialogues.json')
             ]);
             this.config = await configResponse.json();
             this.rules = await rulesResponse.json();
             this.puzzles = await puzzlesResponse.json();
+            this.dialogues = await dialoguesResponse.json();
         } catch (error) {
             console.error('Error loading configurations:', error);
         }
@@ -172,7 +177,7 @@ class Game {
     displayText(text) {
         const output = document.getElementById('output');
         if (output) {
-            output.innerHTML += `<p>${text}</p>`;
+            output.innerHTML += '<p>' + text + '</p>';
             output.scrollTop = output.scrollHeight;
         } else {
             console.error('Output element not found while trying to display:', text);
@@ -209,6 +214,16 @@ class Game {
 
         const input = document.getElementById('commandInput').value.trim().toLowerCase();
         document.getElementById('commandInput').value = '';
+        
+        // Handle dialogue choices if in a dialogue
+        if (this.gameState.currentDialogue) {
+            const choice = parseInt(input);
+            if (!isNaN(choice)) {
+                this.handleDialogueChoice(choice - 1);
+                return;
+            }
+        }
+
         const words = input.split(' ');
         const verb = words[0];
         const object = words.slice(1).join(' ');
@@ -246,6 +261,9 @@ class Game {
                 break;
             case 'load':
                 response = this.loadGame();
+                break;
+            case 'talk':
+                response = this.handleTalk(object);
                 break;
             default:
                 response = this.config.invalidCommandMessage;
@@ -517,6 +535,7 @@ class Game {
 - look: Look around
 - inventory: Check your inventory
 - solve [answer]: Solve an anagram puzzle
+- talk [npc]: Talk to an NPC
 - save: Save your current game
 - load: Load your last saved game
 - help: Show this help message`;
@@ -552,6 +571,67 @@ class Game {
         }
 
         return puzzle.hint || "That's not the correct solution.";
+    }
+
+    handleTalk(npcId) {
+        if (!npcId) {
+            return "Who do you want to talk to?";
+        }
+
+        const normalizedNpcId = this.normalizeItemName(npcId);
+        const dialogue = this.dialogues[normalizedNpcId];
+        
+        if (!dialogue) {
+            return "You can't talk to that.";
+        }
+
+        this.gameState.currentDialogue = normalizedNpcId;
+        this.gameState.currentDialogueNode = dialogue.initialNode;
+        
+        return this.displayDialogueNode();
+    }
+
+    handleDialogueChoice(choiceIndex) {
+        const dialogue = this.dialogues[this.gameState.currentDialogue];
+        if (!dialogue) return;
+
+        const currentNode = dialogue.nodes[this.gameState.currentDialogueNode];
+        if (!currentNode) return;
+
+        const option = currentNode.options[choiceIndex];
+        if (!option) {
+            return "Invalid choice. Please select a valid option.";
+        }
+
+        if (option.nextNode === "end") {
+            this.gameState.currentDialogue = null;
+            this.gameState.currentDialogueNode = null;
+            this.displayText(dialogue.nodes.end.text);
+            return;
+        }
+
+        this.gameState.currentDialogueNode = option.nextNode;
+        this.displayDialogueNode();
+    }
+
+    displayDialogueNode() {
+        const dialogue = this.dialogues[this.gameState.currentDialogue];
+        if (!dialogue) return "Error in dialogue system.";
+
+        const node = dialogue.nodes[this.gameState.currentDialogueNode];
+        if (!node) return "Error in dialogue system.";
+
+        let output = dialogue.name + ':\n' + node.text + '\n\n';
+        
+        if (node.options && node.options.length > 0) {
+            output += "Options:\n";
+            node.options.forEach((option, index) => {
+                output += (index + 1) + '. ' + option.text + '\n';
+            });
+            output += "\nEnter the number of your choice.";
+        }
+
+        return output;
     }
 
     checkWinOrDeath() {
@@ -698,8 +778,9 @@ class Game {
         const progressText = document.getElementById('progressText');
         
         if (progressFill && progressText) {
-            progressFill.style.width = `${progress}%`;
-            progressText.textContent = `${progress}% Complete (${this.gameState.collectedItems}/${this.gameState.totalItems} Items)`;
+            progressFill.style.width = progress + '%';
+            progressText.textContent = progress + '% Complete (' + 
+                this.gameState.collectedItems + '/' + this.gameState.totalItems + ' Items)';
         }
     }
 
@@ -737,8 +818,8 @@ class Game {
             room.classList.add('current');
         }
 
-        room.style.left = `${position.x}%`;
-        room.style.top = `${position.y}%`;
+        room.style.left = position.x + '%';
+        room.style.top = position.y + '%';
         room.style.transform = 'translate(-50%, -50%)';
         room.title = this.formatRoomName(roomId);
 
@@ -757,18 +838,17 @@ class Game {
             connection.classList.add('visited');
         }
 
-        // Calculate connection position and dimensions
         const dx = to.x - from.x;
         const dy = to.y - from.y;
         const length = Math.sqrt(dx * dx + dy * dy);
         const angle = Math.atan2(dy, dx) * 180 / Math.PI;
 
-        connection.style.width = `${length}%`;
+        connection.style.width = length + '%';
         connection.style.height = '2px';
-        connection.style.left = `${from.x}%`;
-        connection.style.top = `${from.y}%`;
+        connection.style.left = from.x + '%';
+        connection.style.top = from.y + '%';
         connection.style.transformOrigin = 'left center';
-        connection.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+        connection.style.transform = 'translate(-50%, -50%) rotate(' + angle + 'deg)';
 
         container.appendChild(connection);
     }

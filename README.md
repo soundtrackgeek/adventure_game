@@ -148,6 +148,64 @@ The game engine is designed to be modular, allowing you to create your own adven
    }
    ```
 
+5. `dialogues.json` - Define NPC conversations and dialogue trees
+   ```json
+   {
+     "npcId": {
+       "name": "Display Name",
+       "initialNode": "startingNodeId",
+       "nodes": {
+         "startingNodeId": {
+           "text": "What the NPC says in this node",
+           "options": [
+             {
+               "text": "Player's first response choice",
+               "nextNode": "node2"
+             },
+             {
+               "text": "Player's second response choice",
+               "nextNode": "node3"
+             }
+           ]
+         },
+         "node2": {
+           "text": "NPC's response to first choice",
+           "options": [
+             {
+               "text": "Go back",
+               "nextNode": "startingNodeId"
+             }
+           ]
+         },
+         "node3": {
+           "text": "NPC's response to second choice",
+           "options": [
+             {
+               "text": "End conversation",
+               "nextNode": "end"
+             }
+           ]
+         },
+         "end": {
+           "text": "Farewell message when conversation ends",
+           "options": []
+         }
+       }
+     }
+   }
+   ```
+
+To add an NPC to a room, include their ID in the room's configuration:
+```json
+{
+  "someRoom": {
+    "description": "A room with an NPC",
+    "npcs": ["npcId"],
+    "choices": ["Other actions", "Talk to npc"]
+  }
+}
+```
+
 ### Creating Puzzles
 
 The game includes a puzzle system that allows you to create various types of interactive puzzles. Puzzles are defined in `puzzles.json`.
@@ -232,6 +290,123 @@ To add puzzles to a room, include a `puzzles` array in the room definition:
    - Make rewards meaningful for game progression
    - Test all possible solutions and edge cases
    - Consider adding multiple ways to solve puzzles
+
+### Creating Dialogues
+
+The dialogue system allows you to create interactive conversations with NPCs. Each dialogue is structured as a tree where player choices determine the conversation path.
+
+#### Dialogue Components
+
+1. **NPC Definition**
+   - `name`: The display name of the NPC
+   - `initialNode`: The starting point of the conversation
+   - `nodes`: Collection of dialogue nodes
+
+2. **Dialogue Nodes**
+   - `text`: What the NPC says
+   - `options`: List of player response choices
+   - Each option has:
+     - `text`: The response text
+     - `nextNode`: Which node to go to next
+
+3. **Special Nodes**
+   - Use `"nextNode": "end"` to end the conversation
+   - The `end` node should have empty options
+
+#### Example Dialogue
+
+Here's an example of a merchant NPC:
+```json
+{
+  "merchant": {
+    "name": "Traveling Merchant",
+    "initialNode": "greeting",
+    "nodes": {
+      "greeting": {
+        "text": "Welcome, traveler! Care to see my wares?",
+        "options": [
+          {
+            "text": "Show me what you have",
+            "nextNode": "showItems"
+          },
+          {
+            "text": "Ask about rumors",
+            "nextNode": "rumors"
+          },
+          {
+            "text": "Goodbye",
+            "nextNode": "end"
+          }
+        ]
+      },
+      "showItems": {
+        "text": "I have potions, scrolls, and rare artifacts. What interests you?",
+        "options": [
+          {
+            "text": "Tell me about the potions",
+            "nextNode": "potions"
+          },
+          {
+            "text": "Back to main topics",
+            "nextNode": "greeting"
+          }
+        ]
+      },
+      "rumors": {
+        "text": "They say the temple's treasures are protected by ancient magic. Only those with special amulets can touch them safely.",
+        "options": [
+          {
+            "text": "Back to main topics",
+            "nextNode": "greeting"
+          }
+        ]
+      },
+      "potions": {
+        "text": "Ah, my potions are quite special. Each one carefully brewed with rare ingredients.",
+        "options": [
+          {
+            "text": "Back to items",
+            "nextNode": "showItems"
+          }
+        ]
+      },
+      "end": {
+        "text": "Safe travels, friend!",
+        "options": []
+      }
+    }
+  }
+}
+```
+
+#### Tips for Creating Dialogues
+
+1. **Plan Your Structure**
+   - Draw out your dialogue tree before implementing
+   - Consider all conversation paths
+   - Plan for ways to return to previous topics
+
+2. **Writing Good Dialogue**
+   - Keep NPC responses concise but informative
+   - Make options clearly distinct from each other
+   - Use dialogue to provide hints and story elements
+
+3. **Testing**
+   - Test all conversation paths
+   - Ensure all nodes can be reached
+   - Verify that "end" nodes properly close the dialogue
+
+4. **Integration**
+   - Add NPCs to appropriate rooms
+   - Include "Talk to [npc]" in room choices
+   - Use dialogue to enhance the story and provide clues
+
+Players can interact with NPCs using the `talk` command:
+```
+> talk merchant
+> 1 (selects first option)
+> 2 (selects second option)
+```
 
 ### Example: Creating a Sci-Fi Adventure
 
