@@ -25,7 +25,7 @@ class Game {
             this.gameState.currentRoom = this.config.startingRoom;
             
             // Calculate room positions using force-directed layout
-            const layout = new ForceDirectedLayout(this.rooms);
+            const layout = new ForceDirectedLayout(this.rooms, this.config.startingRoom);
             layout.initializePositions();
             this.roomPositions = layout.getLayout();
             
