@@ -22,6 +22,10 @@ class Game {
         };
 
         this.loadConfigurations().then(() => {
+            // Set the game title from config
+            document.title = this.config.gameTitle || 'Adventure Game';
+            document.getElementById('gameTitle').textContent = this.config.gameTitle || 'Adventure Game';
+            
             this.gameState.currentRoom = this.config.startingRoom;
             
             // Calculate room positions using force-directed layout
@@ -729,7 +733,8 @@ class Game {
         };
         
         try {
-            localStorage.setItem('templeAdventureSave', JSON.stringify(saveData));
+            const saveKey = `${this.config.gameId || 'adventure'}_save`;
+            localStorage.setItem(saveKey, JSON.stringify(saveData));
             return this.config.saveSuccessMessage;
         } catch (error) {
             console.error('Error saving game:', error);
@@ -739,7 +744,8 @@ class Game {
 
     loadGame() {
         try {
-            const saveData = localStorage.getItem('templeAdventureSave');
+            const saveKey = `${this.config.gameId || 'adventure'}_save`;
+            const saveData = localStorage.getItem(saveKey);
             if (!saveData) {
                 return this.config.loadErrorMessage;
             }

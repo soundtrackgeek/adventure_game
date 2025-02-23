@@ -14,24 +14,27 @@ async function loadGameData() {
         }, 500);
         
         const timestamp = Date.now();
-        const [roomsResponse, itemsResponse] = await Promise.all([
+        const [roomsResponse, itemsResponse, configResponse] = await Promise.all([
             fetch(`./data/rooms.json?t=${timestamp}`),
-            fetch(`./data/items.json?t=${timestamp}`)
+            fetch(`./data/items.json?t=${timestamp}`),
+            fetch(`./data/config.json?t=${timestamp}`)
         ]);
 
-        if (!roomsResponse.ok || !itemsResponse.ok) {
+        if (!roomsResponse.ok || !itemsResponse.ok || !configResponse.ok) {
             throw new Error('Failed to load game data. Try refreshing with Ctrl+F5.');
         }
 
-        const [rooms, items] = await Promise.all([
+        const [rooms, items, config] = await Promise.all([
             roomsResponse.json(),
-            itemsResponse.json()
+            itemsResponse.json(),
+            configResponse.json()
         ]);
 
         // Clear the loading timeout since data is loaded
         clearTimeout(loadingTimeout);
 
-        if (!rooms || !rooms.jungleClearing) {
+        // Validate that the starting room exists
+        if (!rooms || !rooms[config.startingRoom]) {
             throw new Error('Invalid game data structure');
         }
 
