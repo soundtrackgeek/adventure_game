@@ -51,7 +51,7 @@ The game engine is designed to be modular, allowing you to create your own adven
    {
      "gameName": "Your Game Name",
      "welcomeMessage": "Welcome to your adventure!",
-     "startingRoom": "firstRoom",
+     "startingRoom": "firstRoom",  // This defines the starting room for both the game and the map
      // ...other settings
    }
    ```
@@ -63,7 +63,7 @@ The game engine is designed to be modular, allowing you to create your own adven
        "description": "You find yourself in...",
        "image": "assets/images/your-room.jpg",
        "exits": { 
-         "north": "secondRoom",
+         "north": "secondRoom",  // These exits are used to generate the map layout
          "east": "thirdRoom"
        },
        "items": ["key", "note"],
@@ -87,6 +87,31 @@ The game engine is designed to be modular, allowing you to create your own adven
      }
    }
    ```
+
+### Auto-Generated Mini-Map
+
+The game includes an automatic mini-map generation feature that:
+- Creates a visual representation of the game world
+- Shows rooms as nodes and connections as lines
+- Highlights the current room
+- Reveals explored areas as you visit them
+- Automatically layouts rooms based on their connections
+
+The map layout is generated using a force-directed algorithm that:
+- Places rooms based on their exit directions (north, south, east, west)
+- Maintains consistent spatial relationships between rooms
+- Starts from the room specified in config.json's "startingRoom"
+- Adjusts room positions to avoid overlapping
+
+The mini-map updates automatically when:
+- Moving between rooms
+- Loading a saved game
+- Starting a new game
+
+Tips for room layout:
+- Use consistent exit directions (if room A has a north exit to room B, room B should have a south exit to room A)
+- Plan your map layout using the cardinal directions
+- Consider the spatial relationship between rooms when designing exits
 
 3. `items.json` - Define collectible items
    ```json
