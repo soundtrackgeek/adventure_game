@@ -1,13 +1,14 @@
 {
     "streetLevel": {
       "description": "Under the neon-lit night sky, you stand before NeoTech Corp's skyscraper, its glass and steel facade reflecting the city's electric glow. Security drones hum menacingly above, their red lights scanning the area.",
-      "image": "games/cyberpunk_heist/assets/images/street-level.jpg",
+      "image": "assets/images/street-level.jpg",
       "exits": { "north": "lobby" },
       "items": ["hackersLaptop"],
       "choices": ["go north", "look", "take hackersLaptop"]
     },
     "lobby": {
       "description": "The lobby stretches out in a sleek expanse of polished chrome and cold marble. Behind the imposing reception desk, security personnel cast suspicious glances your way, their hands resting near their holsters.",
+      "image": "assets/images/lobby.jpg",
       "exits": { "south": "streetLevel", "east": "elevatorLobby", "west": "securityOffice" },
       "items": [],
       "npcs": ["receptionist"],
@@ -15,6 +16,7 @@
     },
     "elevatorLobby": {
       "description": "Under the harsh, sterile lights, a bank of elevators stands ready, their doors sealed tight. A retinal scanner pulses softly, awaiting authorization.",
+      "image": "assets/images/elevator-lobby.jpg",
       "exits": { "west": "lobby", "up": "employeeLounge" },
       "items": [],
       "requiredItems": { "up": ["keycard"] },
@@ -23,6 +25,7 @@
     },
     "securityOffice": {
       "description": "The air is thick with the scent of ozone and overheated electronics in this cramped office. Monitors flicker erratically, displaying grainy camera feeds, while a control panel hums a low, steady tune.",
+      "image": "assets/images/security-office.jpg",
       "exits": { "east": "lobby" },
       "items": ["keycard"],
       "choices": ["go east", "look", "take keycard"],
@@ -35,6 +38,7 @@
     },
     "employeeLounge": {
       "description": "Worn couches and the faint aroma of synthetic coffee define this cozy lounge. Vending machines dispense glowing snacks, and holo-screens flicker with newsfeeds as employees murmur in hushed tones.",
+      "image": "assets/images/employee-lounge.jpg",
       "exits": { "down": "elevatorLobby", "north": "cafeteria" },
       "items": [],
       "npcs": ["janitor"],
@@ -42,24 +46,28 @@
     },
     "cafeteria": {
       "description": "The air is thick with the tangy scent of synth-food in this bustling cafeteria. Workers hunch over their meals at tables that pulse with a soft, blue light, their conversations a low hum.",
+      "image": "assets/images/cafeteria.jpg",
       "exits": { "south": "employeeLounge", "east": "breakRoom" },
       "items": ["droneJammer"],
       "choices": ["go south", "go east", "look", "take droneJammer"]
     },
     "breakRoom": {
       "description": "In this small, dimly lit room, a coffee machine gurgles sporadically, and a neon sign flickers erratically, casting eerie shadows. The silence is almost palpable.",
+      "image": "assets/images/break-room.jpg",
       "exits": { "west": "cafeteria", "north": "itDepartment" },
       "items": [],
       "choices": ["go west", "go north", "look"]
     },
     "itDepartment": {
       "description": "Cables writhe across the floor like digital serpents in this cluttered office. Terminals blink with lines of code, their screens a kaleidoscope of green and black.",
+      "image": "assets/images/it-department.jpg",
       "exits": { "south": "breakRoom", "east": "serverRoom" },
       "items": ["smartGlasses"],
       "choices": ["go south", "go east", "look", "take smartGlasses"]
     },
     "serverRoom": {
       "description": "The chill bites at your skin as you enter the server room, where rows of servers stand like silent sentinels, humming a monotonous tune. A lone terminal glows, promising control over the building's secrets.",
+      "image": "assets/images/server-room.jpg",
       "exits": { "west": "itDepartment", "north": "networkingCloset" },
       "items": [],
       "choices": ["go west", "go north", "look"],
@@ -72,6 +80,7 @@
     },
     "networkingCloset": {
       "description": "Heat radiates from the packed routers and switches in this tight, claustrophobic space. The incessant blinking of lights and the cacophony of cooling fans assault your senses.",
+      "image": "assets/images/networking-closet.jpg",
       "exits": { "south": "serverRoom", "up": "researchLabA" },
       "items": [],
       "choices": ["go south", "go up", "look"],
@@ -80,18 +89,21 @@
     },
     "researchLabA": {
       "description": "Holo-displays flicker with complex schematics, and robotic arms move with precision, assembling intricate tech in this buzzing lab. The air crackles with innovation.",
+      "image": "assets/images/research-lab-a.jpg",
       "exits": { "down": "networkingCloset", "east": "researchLabB" },
       "items": ["empGrenade"],
       "choices": ["go down", "go east", "look", "take empGrenade"]
     },
     "researchLabB": {
       "description": "Scientists clad in bulky exosuits hunch over workbenches, tinkering with cybernetic implants. Armed guards patrol the perimeter, their eyes scanning for any sign of intrusion.",
+      "image": "assets/images/research-lab-b.jpg",
       "exits": { "west": "researchLabA", "north": "researchLabC" },
       "items": [],
       "choices": ["go west", "go north", "look"]
     },
     "researchLabC": {
       "description": "In the heart of the lab, the prototype AI chip rests within a fortified case, its surface shimmering under the lab's lights. Biometric scanners stand as silent guardians, their sensors ever watchful.",
+      "image": "assets/images/research-lab-c.jpg",
       "exits": { "south": "researchLabB", "up": "executiveSuite" },
       "items": ["dataChip"],
       "choices": ["go south", "go up", "look", "take dataChip"],
@@ -100,12 +112,14 @@
     },
     "executiveSuite": {
       "description": "Plush carpets muffle your footsteps as you enter the executive suite, where floor-to-ceiling windows offer a breathtaking view of the sprawling cityscape below. Every detail screams luxury.",
+      "image": "assets/images/executive-suite.jpg",
       "exits": { "down": "researchLabC", "north": "boardroom" },
       "items": ["laserCutter"],
       "choices": ["go down", "go north", "look", "take laserCutter"]
     },
     "boardroom": {
       "description": "A massive table of polished obsidian dominates the boardroom, surrounded by chairs that have witnessed countless power plays. Holo-projectors stand ready to display the fate of empires.",
+      "image": "assets/images/boardroom.jpg",
       "exits": { "south": "executiveSuite", "up": "rooftopHelipad" },
       "items": [],
       "npcs": ["securityGuard"],
@@ -113,30 +127,35 @@
     },
     "rooftopHelipad": {
       "description": "Wind howls across the exposed helipad, tugging at your clothes. A sleek chopper sits poised for takeoff, its rotors slowly spinning up as your escape beckons.",
+      "image": "assets/images/rooftop-helipad.jpg",
       "exits": { "down": "boardroom" },
       "items": [],
       "choices": ["go down", "look"]
     },
     "basementGenerators": {
       "description": "The air vibrates with the deep rumble of massive generators in this dimly lit basement. Pipes and conduits snake along the walls, and the scent of oil hangs heavy.",
+      "image": "assets/images/basement-generators.jpg",
       "exits": { "east": "maintenanceWorkshop" },
       "items": ["nanotechRepairKit"],
       "choices": ["go east", "look", "take nanotechRepairKit"]
     },
     "maintenanceWorkshop": {
       "description": "Tools of every description and spare parts in various states of repair clutter this workshop. A rickety ladder leans against the wall, promising access to the floors above.",
+      "image": "assets/images/maintenance-workshop.jpg",
       "exits": { "west": "basementGenerators", "up": "lobby" },
       "items": ["cloakingDevice"],
       "choices": ["go west", "go up", "look", "take cloakingDevice"]
     },
     "reception": {
       "description": "A secondary desk, buried under a mountain of paperwork, serves as the visitor check-in. The receptionist looks harried, shuffling through forms with practiced indifference.",
+      "image": "assets/images/reception.jpg",
       "exits": { "north": "lobby" },
       "items": [],
       "choices": ["go north", "look"]
     },
     "storageRoom": {
       "description": "Dust motes dance in the stale air of this forgotten storeroom, where crates of obsolete tech lie abandoned, their contents long since outdated.",
+      "image": "assets/images/storage-room.jpg",
       "exits": { "south": "serverRoom" },
       "items": ["biometricSpoofer"],
       "choices": ["go south", "look", "take biometricSpoofer"]
