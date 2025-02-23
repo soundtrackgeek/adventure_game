@@ -23,8 +23,8 @@ class Game {
 
         this.loadConfigurations().then(() => {
             // Set the game title from config
-            document.title = this.config.gameTitle || 'Adventure Game';
-            document.getElementById('gameTitle').textContent = this.config.gameTitle || 'Adventure Game';
+            document.title = this.config.gameName || 'Adventure Game';
+            document.getElementById('gameTitle').textContent = this.config.gameName || 'Adventure Game';
             
             this.gameState.currentRoom = this.config.startingRoom;
             
