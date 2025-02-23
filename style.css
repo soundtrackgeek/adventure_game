@@ -10,7 +10,7 @@ body {
 }
 
 .game-container {
-    width: 600px;
+    width: 800px;
     padding: 20px;
     background-color: #2a2a2a;
     border-radius: 10px;
@@ -23,7 +23,7 @@ h1 {
 }
 
 .output {
-    height: 300px;
+    height: 250px;
     overflow-y: auto;
     padding: 10px;
     background-color: #333;
@@ -63,7 +63,6 @@ button:hover {
 
 .location-image {
     width: 100%;
-    /* Using aspect-ratio to maintain 1024x768 (4:3) proportions */
     aspect-ratio: 16/9;
     margin-bottom: 20px;
     border-radius: 5px;
@@ -76,4 +75,94 @@ button:hover {
     height: 100%;
     object-fit: contain; /* Changed from cover to contain to prevent cropping */
     background-color: #333;
+}
+
+.game-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 20px;
+}
+
+.mini-map {
+    flex: 1;
+    background-color: #333;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #555;
+}
+
+.mini-map h3, .progress-container h3 {
+    margin: 0 0 10px 0;
+    color: #ffd700;
+    font-size: 1em;
+}
+
+#mapContainer {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background-color: #222;
+    border-radius: 3px;
+}
+
+.map-room {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-color: #444;
+    border: 1px solid #666;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.map-room.visited {
+    background-color: #5a5a5a;
+    border-color: #888;
+}
+
+.map-room.current {
+    background-color: #ffd700;
+    border-color: #ffed4a;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.map-connection {
+    position: absolute;
+    background-color: #444;
+    transition: all 0.3s ease;
+}
+
+.map-connection.visited {
+    background-color: #5a5a5a;
+}
+
+.progress-container {
+    flex: 1;
+    background-color: #333;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #555;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background-color: #222;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+#progressFill {
+    width: 0%;
+    height: 100%;
+    background-color: #ffd700;
+    transition: width 0.3s ease;
+}
+
+#progressText {
+    text-align: center;
+    font-size: 0.9em;
+    color: #ccc;
 }

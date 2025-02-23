@@ -12,18 +12,40 @@ class Game {
             state: {},
             playedSongs: [],
             solvedPuzzles: [],
-            sequenceProgress: {}
+            sequenceProgress: {},
+            visitedRooms: new Set(), // Track visited rooms
+            totalItems: 0, // Track total collectible items
+            collectedItems: 0 // Track collected items
+        };
+
+        // Room positions for the mini-map (percentage-based)
+        this.roomPositions = {
+            jungleClearing: { x: 50, y: 90 },
+            templeEntrance: { x: 50, y: 75 },
+            hallOfStatues: { x: 50, y: 60 },
+            trapRoom: { x: 70, y: 60 },
+            library: { x: 70, y: 45 },
+            altarRoom: { x: 30, y: 60 },
+            undergroundTunnel: { x: 85, y: 60 },
+            chamberOfIdol: { x: 85, y: 45 },
+            treasureRoom: { x: 85, y: 30 },
+            exitPath: { x: 85, y: 15 }
         };
 
         this.loadConfigurations().then(() => {
             this.gameState.currentRoom = this.config.startingRoom;
             
+            // Initialize total items count
+            this.countTotalItems();
+            
             // Initialize audio elements
             this.setupAudio();
             
-            // Show initial room
+            // Show initial room and update UI
             this.displayInitialRoom();
             this.displayLocationImage();
+            this.updateMiniMap();
+            this.updateProgress();
         });
     }
 
@@ -269,7 +291,9 @@ class Game {
                 }
                 
                 this.gameState.currentRoom = nextRoom;
+                this.gameState.visitedRooms.add(nextRoom); // Mark room as visited
                 this.displayLocationImage();
+                this.updateMiniMap(); // Update mini-map after movement
                 
                 const newRoom = this.rooms[nextRoom];
                 if (newRoom.narrationAudio) {
@@ -316,6 +340,8 @@ class Game {
 
             currentRoom.items.splice(itemIndex, 1);
             this.gameState.inventory.push(actualItemName);
+            this.gameState.collectedItems++; // Increment collected items count
+            this.updateProgress(); // Update progress bar
             return `You take the ${this.formatItemName(actualItemName)}.`;
         }
         return this.config.noSuchItemMessage;
@@ -658,5 +684,99 @@ class Game {
             console.error('Error loading game:', error);
             return this.config.loadCorruptedMessage;
         }
+    }
+
+    countTotalItems() {
+        this.gameState.totalItems = Object.values(this.rooms).reduce((total, room) => {
+            return total + (room.items ? room.items.length : 0);
+        }, 0);
+    }
+
+    updateProgress() {
+        const progress = Math.floor((this.gameState.collectedItems / this.gameState.totalItems) * 100);
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        
+        if (progressFill && progressText) {
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `${progress}% Complete (${this.gameState.collectedItems}/${this.gameState.totalItems} Items)`;
+        }
+    }
+
+    updateMiniMap() {
+        const mapContainer = document.getElementById('mapContainer');
+        if (!mapContainer) return;
+
+        // Clear existing map
+        mapContainer.innerHTML = '';
+
+        // Draw connections first (so they appear behind rooms)
+        Object.entries(this.rooms).forEach(([roomId, room]) => {
+            const exits = room.exits || {};
+            Object.entries(exits).forEach(([direction, targetRoomId]) => {
+                this.drawConnection(mapContainer, roomId, targetRoomId);
+            });
+        });
+
+        // Draw rooms
+        Object.keys(this.rooms).forEach(roomId => {
+            this.drawRoom(mapContainer, roomId);
+        });
+    }
+
+    drawRoom(container, roomId) {
+        const position = this.roomPositions[roomId];
+        if (!position) return;
+
+        const room = document.createElement('div');
+        room.className = 'map-room';
+        if (this.gameState.visitedRooms.has(roomId)) {
+            room.classList.add('visited');
+        }
+        if (this.gameState.currentRoom === roomId) {
+            room.classList.add('current');
+        }
+
+        room.style.left = `${position.x}%`;
+        room.style.top = `${position.y}%`;
+        room.style.transform = 'translate(-50%, -50%)';
+        room.title = this.formatRoomName(roomId);
+
+        container.appendChild(room);
+    }
+
+    drawConnection(container, fromRoomId, toRoomId) {
+        const from = this.roomPositions[fromRoomId];
+        const to = this.roomPositions[toRoomId];
+        if (!from || !to) return;
+
+        const connection = document.createElement('div');
+        connection.className = 'map-connection';
+        if (this.gameState.visitedRooms.has(fromRoomId) && 
+            this.gameState.visitedRooms.has(toRoomId)) {
+            connection.classList.add('visited');
+        }
+
+        // Calculate connection position and dimensions
+        const dx = to.x - from.x;
+        const dy = to.y - from.y;
+        const length = Math.sqrt(dx * dx + dy * dy);
+        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+
+        connection.style.width = `${length}%`;
+        connection.style.height = '2px';
+        connection.style.left = `${from.x}%`;
+        connection.style.top = `${from.y}%`;
+        connection.style.transformOrigin = 'left center';
+        connection.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+
+        container.appendChild(connection);
+    }
+
+    formatRoomName(roomId) {
+        return roomId
+            .replace(/([A-Z])/g, ' $1')
+            .trim()
+            .replace(/^\w/, c => c.toUpperCase());
     }
 }

@@ -18,6 +18,8 @@ Since this game loads JSON files, you'll need to run it through a local web serv
 - Collect items and explore the temple
 - Save your progress with "save" command
 - Load a previous game with "load" command
+- Watch your progress on the progress bar
+- Use the mini-map to track explored areas
 - Be careful of traps and curses!
 - Try to escape with the Golden Idol to win
 
@@ -32,6 +34,11 @@ Since this game loads JSON files, you'll need to run it through a local web serv
   - Item combinations
   - Sequence puzzles
   - Anagram puzzles
+- Mini-map showing explored areas
+- Progress tracking system
+  - Visual progress bar
+  - Item collection tracking
+  - Room exploration tracking
 
 ## Creating Your Own Adventure
 
