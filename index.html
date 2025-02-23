@@ -26,14 +26,16 @@
                 </div>
                 <div id="progressText">0% Complete</div>
             </div>
+            <div id="inventory" class="inventory">Inventory: <span id="inventoryList"></span></div>
         </div>
-        <div id="locationImage" class="location-image"></div>
-        <div id="output" class="output"></div>
-        <div class="input-area">
-            <input type="text" id="commandInput" placeholder="Enter command (e.g., go north, take torch, use key)">
-            <button>Submit</button>
+        <div class="game-main">
+            <div id="locationImage" class="location-image"></div>
+            <div id="output" class="output"></div>
+            <div class="input-area">
+                <input type="text" id="commandInput" placeholder="Enter command (e.g., go north, take torch, use key)">
+                <button>Submit</button>
+            </div>
         </div>
-        <div id="inventory" class="inventory">Inventory: <span id="inventoryList"></span></div>
     </div>
     <script>
         // Force cache refresh of game files
