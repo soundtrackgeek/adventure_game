@@ -197,6 +197,22 @@ button:hover {
     transform: translateX(-50%);
 }
 
+.map-connection.direction-up::after {
+    top: -4px;
+    left: 50%;
+    border-width: 0 4px 6px 4px;
+    border-color: transparent transparent #444 transparent;
+    transform: translateX(-50%);
+}
+
+.map-connection.direction-down::after {
+    bottom: -4px;
+    left: 50%;
+    border-width: 6px 4px 0 4px;
+    border-color: #444 transparent transparent transparent;
+    transform: translateX(-50%);
+}
+
 .map-connection.visited {
     background-color: #5a5a5a;
 }
@@ -219,6 +235,14 @@ button:hover {
 
 .map-connection.visited.direction-north::after {
     border-bottom-color: #5a5a5a;
+}
+
+.map-connection.visited.direction-up::after {
+    border-bottom-color: #5a5a5a;
+}
+
+.map-connection.visited.direction-down::after {
+    border-top-color: #5a5a5a;
 }
 
 .progress-container {

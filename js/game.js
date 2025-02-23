@@ -519,7 +519,7 @@ class Game {
 
     handleHelp() {
         return `Available commands:
-- go [direction]: Move in a direction
+- go [direction]: Move in a direction (north, south, east, west, up, down)
 - take [item]: Pick up an item
 - use [item]: Use an item
 - use [item] with [item]: Combine two items
@@ -835,9 +835,15 @@ class Game {
         // Determine the direction for proper arrow placement
         const dx = to.x - from.x;
         const dy = to.y - from.y;
-        const direction = Math.abs(dx) > Math.abs(dy) ? 
-            (dx > 0 ? 'east' : 'west') : 
-            (dy > 0 ? 'south' : 'north');
+        
+        // Check if this is a vertical connection (up/down)
+        const isVertical = this.isVerticalConnection(fromRoomId, toRoomId);
+        const direction = isVertical ? 
+            (dy > 0 ? 'down' : 'up') :
+            Math.abs(dx) > Math.abs(dy) ? 
+                (dx > 0 ? 'east' : 'west') : 
+                (dy > 0 ? 'south' : 'north');
+                
         connection.classList.add(`direction-${direction}`);
 
         if (this.gameState.visitedRooms.has(fromRoomId) && 
@@ -856,6 +862,13 @@ class Game {
         connection.style.transform = 'translate(-50%, -50%) rotate(' + angle + 'deg)';
 
         container.appendChild(connection);
+    }
+
+    isVerticalConnection(fromRoomId, toRoomId) {
+        const room = this.rooms[fromRoomId];
+        if (!room || !room.exits) return false;
+        
+        return room.exits.up === toRoomId || room.exits.down === toRoomId;
     }
 
     formatRoomName(roomId) {
