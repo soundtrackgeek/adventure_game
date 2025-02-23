@@ -4,15 +4,31 @@ let game;
 async function loadAvailableGames() {
     const gamesList = document.getElementById('gamesList');
     try {
-        const games = [
-            {
-                id: 'temple_adventure',
-                name: 'Temple Adventure',
-                description: 'Explore an ancient temple filled with traps, puzzles, and treasures.',
-                thumbnail: 'games/temple_adventure/assets/images/temple-entrance.jpg'
+        const timestamp = Date.now();
+        const availableGames = ['temple_adventure', 'cyberpunk_heist']; // Add new games to this array
+        const games = [];
+
+        for (const gameId of availableGames) {
+            try {
+                const configResponse = await fetch(`games/${gameId}/data/config.json?t=${timestamp}`);
+                if (configResponse.ok) {
+                    const config = await configResponse.json();
+                    games.push({
+                        id: config.id || gameId,
+                        name: config.gameName || 'Unnamed Game',
+                        description: config.description || 'No description available',
+                        thumbnail: config.thumbnail || `games/${gameId}/assets/images/default.jpg`
+                    });
+                }
+            } catch (error) {
+                console.warn(`Failed to load config for game ${gameId}:`, error);
             }
-            // More games can be added here
-        ];
+        }
+
+        if (games.length === 0) {
+            gamesList.innerHTML = '<p>No games available.</p>';
+            return;
+        }
 
         games.forEach(game => {
             const gameCard = document.createElement('div');

@@ -1,5 +1,8 @@
 {
+    "id": "temple_adventure",
     "gameName": "Temple Adventure",
+    "description": "Explore an ancient temple filled with traps, puzzles, and treasures.",
+    "thumbnail": "games/temple_adventure/assets/images/temple-entrance.jpg",
     "welcomeMessage": "Welcome to Temple Adventure!",
     "helpMessage": "Available commands:\n- go [direction]: Move in a direction (north, south, east, west)\n- take [item]: Pick up an item\n- use [item]: Use an item in your inventory\n- look: Examine your surroundings\n- inventory: Check what you're carrying\n- help: Show this help message",
     "inventoryEmptyMessage": "Your inventory is empty.",
