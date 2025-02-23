@@ -40,6 +40,7 @@
     <script>
         // Force cache refresh of game files
         const timestamp = Date.now();
+        document.write(`<script src="js/map-layout.js?v=${timestamp}"><\/script>`);
         document.write(`<script src="js/game.js?v=${timestamp}"><\/script>`);
         document.write(`<script src="js/main.js?v=${timestamp}"><\/script>`);
     </script>

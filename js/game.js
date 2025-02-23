@@ -21,22 +21,13 @@ class Game {
             currentDialogueNode: null
         };
 
-        // Room positions for the mini-map (percentage-based)
-        this.roomPositions = {
-            jungleClearing: { x: 50, y: 90 },
-            templeEntrance: { x: 50, y: 75 },
-            hallOfStatues: { x: 50, y: 60 },
-            trapRoom: { x: 70, y: 60 },
-            library: { x: 70, y: 45 },
-            altarRoom: { x: 30, y: 60 },
-            undergroundTunnel: { x: 85, y: 60 },
-            chamberOfIdol: { x: 85, y: 45 },
-            treasureRoom: { x: 85, y: 30 },
-            exitPath: { x: 85, y: 15 }
-        };
-
         this.loadConfigurations().then(() => {
             this.gameState.currentRoom = this.config.startingRoom;
+            
+            // Calculate room positions using force-directed layout
+            const layout = new ForceDirectedLayout(this.rooms);
+            layout.initializePositions();
+            this.roomPositions = layout.getLayout();
             
             // Initialize total items count
             this.countTotalItems();
