@@ -31,5 +31,9 @@
     },
     "biometricSpoofer": {
       "description": "Bypasses biometric security checks."
+    },
+    "augmentedLaptop": {
+      "description": "A high-powered laptop enhanced with AR glasses for maximum hacking potential.",
+      "usableIn": ["serverRoom", "securityOffice"]
     }
-  }
+}
