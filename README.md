@@ -16,6 +16,8 @@ Since this game loads JSON files, you'll need to run it through a local web serv
 ## How to Play
 - Use commands like "go north", "take torch", or "use key"
 - Collect items and explore the temple
+- Save your progress with "save" command
+- Load a previous game with "load" command
 - Be careful of traps and curses!
 - Try to escape with the Golden Idol to win
 
@@ -25,6 +27,7 @@ Since this game loads JSON files, you'll need to run it through a local web serv
 - Items to collect and use
 - Various win and death conditions
 - Inventory system
+- Save/load game functionality
 - Interactive puzzle system with:
   - Item combinations
   - Sequence puzzles
