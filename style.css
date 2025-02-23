@@ -13,7 +13,6 @@ body {
     width: 1000px;
     padding: 20px;
     display: grid;
-    grid-template-columns: 250px 1fr;
     gap: 20px;
     background-color: #2a2a2a;
     border-radius: 10px;
@@ -284,8 +283,8 @@ button:hover {
 
 .game-select {
     width: 100%;
-    text-align: center;
     grid-column: 1 / -1;
+    text-align: center;
 }
 
 .games-list {
@@ -326,6 +325,7 @@ button:hover {
 
 .game-interface {
     width: 100%;
+    grid-column: 1 / -1;
     display: grid;
     grid-template-columns: 250px 1fr;
     gap: 20px;
