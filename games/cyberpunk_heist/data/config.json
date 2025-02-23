@@ -2,7 +2,7 @@
     "id": "cyberpunk heist",
     "gameName": "Cyberpunk Heist",
     "description": "Infiltrate NeoTech Corp as a skilled hacker to steal a prototype AI chip in this cyberpunk adventure.",
-    "thumbnail": "games/cyberpunk heist/assets/images/street-level.jpg",
+    "thumbnail": "games/cyberpunk_heist/assets/images/street-level.jpg",
     "welcomeMessage": "Welcome to Cyberpunk Heist! You're a hacker tasked with stealing a prototype AI chip from NeoTech Corp.",
     "helpMessage": "Available commands:\n- go [direction]: Move (north, south, east, west, up, down)\n- take [item]: Pick up an item\n- use [item]: Use an item\n- look: Examine surroundings\n- inventory: Check inventory\n- help: Show this message",
     "inventoryEmptyMessage": "Your inventory is empty.",
