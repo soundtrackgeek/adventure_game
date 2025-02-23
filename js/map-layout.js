@@ -1,14 +1,15 @@
 class ForceDirectedLayout {
-    constructor(rooms) {
+    constructor(rooms, startRoom = 'start') {
         this.rooms = rooms;
         this.positions = new Map();
         this.depths = new Map(); // Track depth from start
         this.visited = new Set();
+        this.startRoom = startRoom;
     }
 
     initializePositions() {
-        // Start with the jungle clearing (assumed starting point)
-        this.calculateDepths('jungleClearing', 0);
+        // Start from the configured starting point
+        this.calculateDepths(this.startRoom, 0);
         this.positionRooms();
     }
 
@@ -37,7 +38,7 @@ class ForceDirectedLayout {
         
         // Reset visited set for another traversal
         this.visited.clear();
-        this.calculateDirectionalDepths('jungleClearing', 0, 0);
+        this.calculateDirectionalDepths(this.startRoom, 0, 0);
 
         // Calculate total depths to determine layout bounds
         this.depths.forEach((depthPair) => {
