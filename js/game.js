@@ -219,6 +219,12 @@ class Game {
             case 'solve':
                 response = this.handleAnagramPuzzle(object);
                 break;
+            case 'save':
+                response = this.saveGame();
+                break;
+            case 'load':
+                response = this.loadGame();
+                break;
             default:
                 response = this.config.invalidCommandMessage;
         }
@@ -485,6 +491,8 @@ class Game {
 - look: Look around
 - inventory: Check your inventory
 - solve [answer]: Solve an anagram puzzle
+- save: Save your current game
+- load: Load your last saved game
 - help: Show this help message`;
     }
 
@@ -604,5 +612,51 @@ class Game {
                 this.audioElement.volume = this.config.bgMusicVolume;
             }
         };
+    }
+
+    saveGame() {
+        const saveData = {
+            currentRoom: this.gameState.currentRoom,
+            inventory: this.gameState.inventory,
+            gameOver: this.gameState.gameOver,
+            state: this.gameState.state,
+            solvedPuzzles: this.gameState.solvedPuzzles,
+            sequenceProgress: this.gameState.sequenceProgress
+        };
+        
+        try {
+            localStorage.setItem('templeAdventureSave', JSON.stringify(saveData));
+            return this.config.saveSuccessMessage;
+        } catch (error) {
+            console.error('Error saving game:', error);
+            return this.config.saveErrorMessage;
+        }
+    }
+
+    loadGame() {
+        try {
+            const saveData = localStorage.getItem('templeAdventureSave');
+            if (!saveData) {
+                return this.config.loadErrorMessage;
+            }
+
+            const parsedData = JSON.parse(saveData);
+            this.gameState.currentRoom = parsedData.currentRoom;
+            this.gameState.inventory = parsedData.inventory;
+            this.gameState.gameOver = parsedData.gameOver;
+            this.gameState.state = parsedData.state;
+            this.gameState.solvedPuzzles = parsedData.solvedPuzzles;
+            this.gameState.sequenceProgress = parsedData.sequenceProgress;
+
+            // Update display
+            this.displayLocationImage();
+            this.updateInventory();
+            
+            // Return the current room description with load success message
+            return `${this.config.loadSuccessMessage}\n\n${this.handleLook()}`;
+        } catch (error) {
+            console.error('Error loading game:', error);
+            return this.config.loadCorruptedMessage;
+        }
     }
 }
