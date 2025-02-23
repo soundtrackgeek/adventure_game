@@ -831,13 +831,20 @@ class Game {
 
         const connection = document.createElement('div');
         connection.className = 'map-connection';
+        
+        // Determine the direction for proper arrow placement
+        const dx = to.x - from.x;
+        const dy = to.y - from.y;
+        const direction = Math.abs(dx) > Math.abs(dy) ? 
+            (dx > 0 ? 'east' : 'west') : 
+            (dy > 0 ? 'south' : 'north');
+        connection.classList.add(`direction-${direction}`);
+
         if (this.gameState.visitedRooms.has(fromRoomId) && 
             this.gameState.visitedRooms.has(toRoomId)) {
             connection.classList.add('visited');
         }
 
-        const dx = to.x - from.x;
-        const dy = to.y - from.y;
         const length = Math.sqrt(dx * dx + dy * dy);
         const angle = Math.atan2(dy, dx) * 180 / Math.PI;
 

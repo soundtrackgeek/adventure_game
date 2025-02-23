@@ -46,10 +46,15 @@ class ForceDirectedLayout {
         });
 
         // Position rooms based on their directional depths
+        // Using a wider spacing range (15-85% instead of previous 10-90%)
+        const spacing = 15; // Increased minimum spacing from edges
+        const availableWidth = 85 - spacing;
+        const availableHeight = 85 - spacing;
+
         this.depths.forEach((depthPair, roomId) => {
-            // Convert depths to percentage positions (10-90% range)
-            const x = 50 + (depthPair.east * 40 / (maxEastDepth + 1));
-            const y = 50 + (depthPair.north * 40 / (maxNorthDepth + 1));
+            // Convert depths to percentage positions with wider spacing
+            const x = spacing + ((depthPair.east + maxEastDepth) * availableWidth / (maxEastDepth * 2 + 1));
+            const y = spacing + ((depthPair.north + maxNorthDepth) * availableHeight / (maxNorthDepth * 2 + 1));
             this.positions.set(roomId, { x, y });
         });
     }
