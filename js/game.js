@@ -605,7 +605,8 @@ class Game {
 
         const option = currentNode.options[choiceIndex];
         if (!option) {
-            return "Invalid choice. Please select a valid option.";
+            this.displayText("Invalid choice. Please select a valid option.");
+            return;
         }
 
         if (option.nextNode === "end") {
@@ -616,7 +617,8 @@ class Game {
         }
 
         this.gameState.currentDialogueNode = option.nextNode;
-        this.displayDialogueNode();
+        const dialogueText = this.displayDialogueNode();
+        this.displayText(dialogueText);
     }
 
     displayDialogueNode() {
