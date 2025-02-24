@@ -1,0 +1,51 @@
+{
+  "oldJournal": {
+    "description": "A leather-bound diary filled with cryptic notes and faded sketches hinting at the silo's hidden history."
+  },
+  "hackingModule": {
+    "description": "An archaic yet potent device capable of overriding security systems deep within the silo."
+  },
+  "siloMap": {
+    "description": "A timeworn blueprint that reveals secret passages and long-forgotten sections of the silo."
+  },
+  "wornAccessCard": {
+    "description": "A battered access card whose faded magnetic strip still seems to hold power over locked doors."
+  },
+  "waterFilter": {
+    "description": "A jury-rigged water filtration unit that turns contaminated sources into drinkable water."
+  },
+  "antidote": {
+    "description": "A medicinal serum that neutralizes a wide range of toxins, offering hope in desperate times."
+  },
+  "crowbar": {
+    "description": "A heavy iron tool used to pry stubborn doors and reveal hidden compartments."
+  },
+  "maintenanceBadge": {
+    "description": "A creased badge granting clearance to restricted areas deep within the silo."
+  },
+  "syringeOfSerum": {
+    "description": "A small syringe containing an experimental compound, rumored to boost endurance when used in emergencies."
+  },
+  "encryptedDataChip": {
+    "description": "A mysterious data chip said to contain secrets that could reshape the future of the silo.",
+    "winCondition": true
+  },
+  "nanotechRepairKit": {
+    "description": "A compact kit filled with nanobots designed to repair both machinery and minor injuries."
+  },
+  "smartGlasses": {
+    "description": "Augmented reality glasses that reveal hidden details and unlock digital secrets when paired with the correct device."
+  },
+  "herbalElixir": {
+    "description": "A concoction brewed from mutant flora; its effects are as unpredictable as they are potent."
+  },
+  "seedBundle": {
+    "description": "A small pack of genetically resilient seeds that could restore life to barren areas of the silo."
+  },
+  "energyBar": {
+    "description": "A compact, nutrient-dense bar that provides a quick burst of energy in dire moments."
+  },
+  "liftKey": {
+    "description": "A sturdy key necessary for accessing the ancient elevator system that connects disparate levels of the silo."
+  }
+}

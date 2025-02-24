@@ -1,0 +1,113 @@
+{
+  "oldWarden": {
+    "name": "Old Warden",
+    "initialNode": "welcome",
+    "nodes": {
+      "welcome": {
+        "text": "I've watched many come and go through these rusted corridors. What drives you into the depths of this forsaken place?",
+        "options": [
+          { "text": "I'm seeking the truth behind these walls.", "nextNode": "truth" },
+          { "text": "I only want to survive.", "nextNode": "survival" }
+        ]
+      },
+      "truth": {
+        "text": "Truth in the silo is a double-edged sword. It brings enlightenment... and peril in equal measure. Proceed, if you dare.",
+        "options": [
+          { "text": "I must know.", "nextNode": "advice" },
+          { "text": "Maybe ignorance is bliss.", "nextNode": "end" }
+        ]
+      },
+      "survival": {
+        "text": "Survival requires caution, but sometimes you must risk it all to uncover what lies hidden. Stay vigilant.",
+        "options": [
+          { "text": "I'll tread carefully.", "nextNode": "end" }
+        ]
+      },
+      "advice": {
+        "text": "Find the control signals hidden in the command center and listen to the whispers of the past. Trust nothing and everyone is suspect.",
+        "options": [
+          { "text": "Thank you for the guidance.", "nextNode": "end" }
+        ]
+      },
+      "end": {
+        "text": "Remember: In the depths of this silo, even hope can be a trap.",
+        "options": []
+      }
+    }
+  },
+  "mechanic": {
+    "name": "Mechanic",
+    "initialNode": "greeting",
+    "nodes": {
+      "greeting": {
+        "text": "Need a system reboot or a door cracked? I might be able to help—for a price, of course.",
+        "options": [
+          { "text": "I require access to restricted sections.", "nextNode": "access" },
+          { "text": "Tell me how these old systems work.", "nextNode": "explain" }
+        ]
+      },
+      "access": {
+        "text": "Without the proper credentials, these systems will bite you. Bring me a worn access card, and we’ll see what’s possible.",
+        "options": [
+          { "text": "I have it right here.", "nextNode": "approval" },
+          { "text": "I'll search for it.", "nextNode": "end" }
+        ]
+      },
+      "explain": {
+        "text": "These machines are as temperamental as the people who trusted them. Tinker too much, and you'll light your own fuse.",
+        "options": [
+          { "text": "Understood. I’ll be cautious.", "nextNode": "end" }
+        ]
+      },
+      "approval": {
+        "text": "Alright, let’s get this system pulsing again. Step aside while I work.",
+        "options": [
+          { "text": "I'll wait.", "nextNode": "end" }
+        ]
+      },
+      "end": {
+        "text": "Don’t linger too long. The silence here hides more than just echoes.",
+        "options": []
+      }
+    }
+  },
+  "securityGuard": {
+    "name": "Security Guard",
+    "initialNode": "alert",
+    "nodes": {
+      "alert": {
+        "text": "Halt! State your purpose in this restricted zone or prepare to be removed.",
+        "options": [
+          { "text": "I'm here on official business.", "nextNode": "verify" },
+          { "text": "I just got lost.", "nextNode": "dismiss" }
+        ]
+      },
+      "verify": {
+        "text": "Your credentials better be in order. Hand over your badge if you have it.",
+        "options": [
+          { "text": "I seem to have misplaced it.", "nextNode": "fail" },
+          { "text": "Here it is.", "nextNode": "approved" }
+        ]
+      },
+      "fail": {
+        "text": "No badge means no entry. And that will not go unanswered.",
+        "options": [],
+        "setState": { "alarmTriggered": true }
+      },
+      "approved": {
+        "text": "Access granted—for now. Watch your step.",
+        "options": [
+          { "text": "Thank you.", "nextNode": "end" }
+        ]
+      },
+      "dismiss": {
+        "text": "Don't waste my time. Get out before things get ugly.",
+        "options": []
+      },
+      "end": {
+        "text": "Move along quietly.",
+        "options": []
+      }
+    }
+  }
+}

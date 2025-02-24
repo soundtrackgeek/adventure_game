@@ -1,0 +1,76 @@
+{
+  "roomConditions": {
+    "commandCenter": {
+      "exit": {
+        "north": {
+          "requires": {
+            "inventory": "wornAccessCard",
+            "message": "The control console rejects your command without the worn access card."
+          },
+          "gameOver": false
+        }
+      }
+    },
+    "recyclingBay": {
+      "exit": {
+        "up": {
+          "requires": {
+            "inventory": "liftKey",
+            "message": "The malfunctioning machinery demands the lift key for a safe ascent."
+          },
+          "gameOver": true
+        }
+      }
+    }
+  },
+  "itemConditions": {
+    "encryptedDataChip": {
+      "take": {
+        "requires": {
+          "inventory": "smartGlasses",
+          "failureMessage": "Without smart glasses, the chip's encryption activates security protocols. Game over.",
+          "gameOver": true
+        },
+        "alternative": {
+          "state": "robotsDisabled",
+          "value": true,
+          "message": "With the robots disabled, you secure the encrypted data chip safely."
+        }
+      }
+    }
+  },
+  "specialActions": {
+    "researchLab": {
+      "use": {
+        "empGrenade": {
+          "message": "The EMP disrupts malfunctioning robots, clearing a dangerous path.",
+          "setState": {
+            "robotsDisabled": true
+          }
+        }
+      }
+    }
+  },
+  "winConditions": [
+    {
+      "room": "rooftopHelipad",
+      "requires": {
+        "inventory": [
+          "encryptedDataChip"
+        ]
+      },
+      "message": "You board the chopper with the chip and escape the doomed silo. Victory!"
+    }
+  ],
+  "deathConditions": [
+    {
+      "room": "any",
+      "when": {
+        "state": "alarmTriggered",
+        "value": true
+      },
+      "chance": 1.0,
+      "message": "Alarms blare. Security protocols activate, sealing your fate."
+    }
+  ]
+}

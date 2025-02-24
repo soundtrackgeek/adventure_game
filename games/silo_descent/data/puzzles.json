@@ -1,0 +1,25 @@
+{
+  "combinations": {
+    "module_card": {
+      "ingredients": ["hackingModule", "wornAccessCard"],
+      "result": "accessPermit",
+      "message": "You merge the hacking module with the card, generating a makeshift access permit that hums with latent power.",
+      "removeIngredients": true
+    }
+  },
+  "sequences": {
+    "controlSequence": {
+      "requiredSequence": ["flipSwitch", "enterCode", "pressButton"],
+      "message": "The control panel sputters to life, unlocking barred sections of the silo and revealing hidden pathways.",
+      "setState": { "panelActivated": true }
+    }
+  },
+  "anagrams": {
+    "siloAnagram": {
+      "scrambled": "OILS",
+      "solution": "silo",
+      "hint": "Unscramble these letters to reveal the sanctuary of abandonment.",
+      "reward": "encryptedDataChip"
+    }
+  }
+}
