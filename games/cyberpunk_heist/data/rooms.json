@@ -5,7 +5,7 @@
       "exits": { "north": "lobby" },
       "items": ["hackersLaptop"],
       "narrationAudio": "assets/sounds/narration/street-level.wav",
-      "choices": ["go north", "look", "take hackersLaptop"]
+      "choices": ["go north", "look", "take hackers laptop"]
     },
     "lobby": {
       "description": "The lobby stretches out in a sleek expanse of polished chrome and cold marble. Behind the imposing reception desk, security personnel cast suspicious glances your way, their hands resting near their holsters.",
@@ -14,7 +14,7 @@
       "exits": { "south": "streetLevel", "east": "elevatorLobby", "west": "securityOffice" },
       "items": [],
       "npcs": ["receptionist"],
-      "choices": ["go south", "go east", "go west", "look", "talk receptionist"]
+      "choices": ["go south", "go east", "go west", "look", "talk to receptionist"]
     },
     "elevatorLobby": {
       "description": "Under the harsh, sterile lights, a bank of elevators stands ready, their doors sealed tight. A retinal scanner pulses softly, awaiting authorization.",
@@ -47,7 +47,7 @@
       "exits": { "down": "elevatorLobby", "north": "cafeteria" },
       "items": [],
       "npcs": ["janitor"],
-      "choices": ["go down", "go north", "look", "talk janitor"]
+      "choices": ["go down", "go north", "look", "talk to janitor"]
     },
     "cafeteria": {
       "description": "The air is thick with the tangy scent of synth-food in this bustling cafeteria. Workers hunch over their meals at tables that pulse with a soft, blue light, their conversations a low hum.",
@@ -55,7 +55,7 @@
       "narrationAudio": "assets/sounds/narration/cafeteria.wav",
       "exits": { "south": "employeeLounge", "east": "breakRoom" },
       "items": ["droneJammer"],
-      "choices": ["go south", "go east", "look", "take droneJammer"]
+      "choices": ["go south", "go east", "look", "take drone jammer"]
     },
     "breakRoom": {
       "description": "In this small, dimly lit room, a coffee machine gurgles sporadically, and a neon sign flickers erratically, casting eerie shadows. The silence is almost palpable.",
@@ -71,7 +71,7 @@
       "narrationAudio": "assets/sounds/narration/it-department.wav",
       "exits": { "south": "breakRoom", "east": "serverRoom" },
       "items": ["smartGlasses"],
-      "choices": ["go south", "go east", "look", "take smartGlasses"]
+      "choices": ["go south", "go east", "look", "take smart glasses"]
     },
     "serverRoom": {
       "description": "The chill bites at your skin as you enter the server room, where rows of servers stand like silent sentinels, humming a monotonous tune. A lone terminal glows, promising control over the building's secrets.",
@@ -103,7 +103,7 @@
       "narrationAudio": "assets/sounds/narration/research-lab-a.wav",
       "exits": { "down": "networkingCloset", "east": "researchLabB" },
       "items": ["empGrenade"],
-      "choices": ["go down", "go east", "look", "take empGrenade"]
+      "choices": ["go down", "go east", "look", "take emp grenade"]
     },
     "researchLabB": {
       "description": "Scientists clad in bulky exosuits hunch over workbenches, tinkering with cybernetic implants. Armed guards patrol the perimeter, their eyes scanning for any sign of intrusion.",
@@ -119,7 +119,7 @@
       "narrationAudio": "assets/sounds/narration/research-lab-c.wav",
       "exits": { "south": "researchLabB", "up": "executiveSuite" },
       "items": ["dataChip"],
-      "choices": ["go south", "go up", "look", "take dataChip"],
+      "choices": ["go south", "go up", "look", "take data chip"],
       "requiredItems": { "dataChip": ["biometricSpoofer"] },
       "deathMessages": { "dataChip": "The scanner detects you. Alarms sound, and drones eliminate you." }
     },
@@ -129,7 +129,7 @@
       "narrationAudio": "assets/sounds/narration/executive-suite.wav",
       "exits": { "down": "researchLabC", "north": "boardroom" },
       "items": ["laserCutter"],
-      "choices": ["go down", "go north", "look", "take laserCutter"]
+      "choices": ["go down", "go north", "look", "take laser cutter"]
     },
     "boardroom": {
       "description": "A massive table of polished obsidian dominates the boardroom, surrounded by chairs that have witnessed countless power plays. Holo-projectors stand ready to display the fate of empires.",
@@ -138,7 +138,7 @@
       "exits": { "south": "executiveSuite", "up": "rooftopHelipad" },
       "items": [],
       "npcs": ["securityGuard"],
-      "choices": ["go south", "go up", "look", "talk securityGuard"]
+      "choices": ["go south", "go up", "look", "talk to security guard"]
     },
     "rooftopHelipad": {
       "description": "Wind howls across the exposed helipad, tugging at your clothes. A sleek chopper sits poised for takeoff, its rotors slowly spinning up as your escape beckons.",
@@ -154,7 +154,7 @@
       "narrationAudio": "assets/sounds/narration/basement-generators.wav",
       "exits": { "east": "maintenanceWorkshop" },
       "items": ["nanotechRepairKit"],
-      "choices": ["go east", "look", "take nanotechRepairKit"]
+      "choices": ["go east", "look", "take nanotech tepair kit"]
     },
     "maintenanceWorkshop": {
       "description": "Tools of every description and spare parts in various states of repair clutter this workshop. A rickety ladder leans against the wall, promising access to the floors above.",
@@ -162,7 +162,7 @@
       "narrationAudio": "assets/sounds/narration/maintenance-workshop.wav",
       "exits": { "west": "basementGenerators", "up": "lobby" },
       "items": ["cloakingDevice"],
-      "choices": ["go west", "go up", "look", "take cloakingDevice"]
+      "choices": ["go west", "go up", "look", "take cloaking device"]
     },
     "reception": {
       "description": "A secondary desk, buried under a mountain of paperwork, serves as the visitor check-in. The receptionist looks harried, shuffling through forms with practiced indifference.",
@@ -178,6 +178,6 @@
       "narrationAudio": "assets/sounds/narration/storage-room.wav",
       "exits": { "south": "serverRoom" },
       "items": ["biometricSpoofer"],
-      "choices": ["go south", "look", "take biometricSpoofer"]
+      "choices": ["go south", "look", "take biometric spoofer"]
     }
   }
