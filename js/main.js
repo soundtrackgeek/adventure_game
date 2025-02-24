@@ -5,7 +5,11 @@ async function loadAvailableGames() {
     const gamesList = document.getElementById('gamesList');
     try {
         const timestamp = Date.now();
-        const availableGames = ['temple_adventure', 'cyberpunk_heist']; // Add new games to this array
+        const gamesResponse = await fetch(`/list-games?t=${timestamp}`);
+        if (!gamesResponse.ok) {
+            throw new Error('Failed to fetch games list');
+        }
+        const availableGames = await gamesResponse.json();
         const games = [];
 
         for (const gameId of availableGames) {
