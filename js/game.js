@@ -21,12 +21,26 @@ class Game {
             currentDialogue: null,
             currentDialogueNode: null
         };
-
+        
+        // Ensure all configs are loaded before initializing the game
         this.loadConfigurations().then(() => {
+            if (!this.config || !this.rules || !this.puzzles || !this.dialogues) {
+                console.error('Failed to load required game data');
+                document.getElementById('output').innerHTML = '<p>Error: Failed to load game data. Please refresh the page.</p>';
+                return;
+            }
+
+            if (!this.rooms || !this.items) {
+                console.error('Missing rooms or items data');
+                document.getElementById('output').innerHTML = '<p>Error: Failed to load game data. Please refresh the page.</p>';
+                return;
+            }
+
             // Set the game title from config
             document.title = this.config.gameName || 'Adventure Game';
             document.getElementById('gameTitle').textContent = this.config.gameName || 'Adventure Game';
             
+            // Initialize starting room only after config is loaded
             this.gameState.currentRoom = this.config.startingRoom;
             
             // Calculate room positions using force-directed layout
@@ -45,6 +59,9 @@ class Game {
             this.displayLocationImage();
             this.updateMiniMap();
             this.updateProgress();
+        }).catch(error => {
+            console.error('Error initializing game:', error);
+            document.getElementById('output').innerHTML = '<p>Error: Failed to initialize game. Please refresh the page.</p>';
         });
     }
 

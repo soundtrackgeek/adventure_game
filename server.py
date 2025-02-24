@@ -2,6 +2,7 @@ from http.server import HTTPServer, SimpleHTTPRequestHandler
 import os
 import json
 import urllib.parse  # added for URL parsing
+import signal
 
 class CORSRequestHandler(SimpleHTTPRequestHandler):
     def end_headers(self):
@@ -16,6 +17,16 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
         # Parse the URL to separate the path and query
         parsed = urllib.parse.urlparse(self.path)
         print(f"Parsed path: {parsed.path}, Query: {parsed.query}")
+        
+        # Add debug logging for rooms.json and items.json
+        if 'rooms.json' in parsed.path or 'items.json' in parsed.path:
+            print(f"Attempting to serve file: {parsed.path}")
+            try:
+                file_path = os.path.join(os.getcwd(), parsed.path.lstrip('/'))
+                print(f"Full file path: {file_path}")
+                print(f"File exists: {os.path.exists(file_path)}")
+            except Exception as e:
+                print(f"Error checking file: {e}")
         
         # Check if the request path starts with '/list-games'
         if parsed.path.startswith('/list-games'):
@@ -67,8 +78,24 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
                 
         return SimpleHTTPRequestHandler.do_GET(self)
 
+def signal_handler(sig, frame):
+    print('\nShutting down server gracefully...')
+    httpd.shutdown()
+    httpd.server_close()
+    exit(0)
+
 if __name__ == '__main__':
     server_address = ('', 8000)
     httpd = HTTPServer(server_address, CORSRequestHandler)
-    print('Server running on port 8000...')
-    httpd.serve_forever()
+    
+    # Set up signal handler for graceful shutdown
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+    
+    print('Server running on port 8000... (Press Ctrl+C to quit)')
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print('\nShutting down server gracefully...')
+        httpd.shutdown()
+        httpd.server_close()
