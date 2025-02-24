@@ -5,7 +5,7 @@ async function loadAvailableGames() {
     const gamesList = document.getElementById('gamesList');
     try {
         const timestamp = Date.now();
-        const gamesResponse = await fetch(`/list-games?t=${timestamp}`);
+        const gamesResponse = await fetch(`http://localhost:8000/list-games?t=${timestamp}`);
         if (!gamesResponse.ok) {
             throw new Error('Failed to fetch games list');
         }
