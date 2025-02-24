@@ -1,6 +1,7 @@
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 import os
 import json
+import urllib.parse  # added for URL parsing
 
 class CORSRequestHandler(SimpleHTTPRequestHandler):
     def end_headers(self):
@@ -9,18 +10,30 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
         super().end_headers()
 
     def do_GET(self):
-        # Handle games directory listing request
-        if self.path == '/list-games':
+        # Debug print for incoming request path
+        print(f"Incoming request: {self.path}")
+        
+        # Parse the URL to separate the path and query
+        parsed = urllib.parse.urlparse(self.path)
+        print(f"Parsed path: {parsed.path}, Query: {parsed.query}")
+        
+        # Check if the request path starts with '/list-games'
+        if parsed.path.startswith('/list-games'):
+            print('Handling /list-games request')
             try:
-                games_path = os.path.join(os.getcwd(), 'games')
+                # Use the script's directory instead of current working directory
+                base_dir = os.path.dirname(os.path.abspath(__file__))
+                games_path = os.path.join(base_dir, 'games')
                 games = [d for d in os.listdir(games_path) 
-                        if os.path.isdir(os.path.join(games_path, d)) and 
-                        os.path.exists(os.path.join(games_path, d, 'data', 'config.json'))]
+                         if os.path.isdir(os.path.join(games_path, d)) and 
+                         os.path.exists(os.path.join(games_path, d, 'data', 'config.json'))]
                 
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')
                 self.end_headers()
-                self.wfile.write(json.dumps(games).encode())
+                response = json.dumps(games).encode()
+                self.wfile.write(response)
+                print(f"Responded with games: {games}")
                 return
             except Exception as e:
                 print(f"Error listing games: {e}")
