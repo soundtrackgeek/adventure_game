@@ -2,7 +2,7 @@
     "id": "silo_descent",
     "gameName": "Silo Descent: Echoes of the Past",
     "description": "Descend into the dark depths of the silo where every step is a battle against decay and fate.",
-    "thumbnail": "games/silo_descent/assets/images/entry-hall.jpg",
+    "thumbnail": "games/silo_descent/assets/images/entryHall.jpg",
     "welcomeMessage": "Welcome to Silo Descent: Echoes of the Past! Descend into the dark depths of the silo where every step is a battle against decay and fate. Uncover secrets, avoid deadly traps, and discover hidden truths as you survive in a crumbling world.",
     "helpMessage": "Available commands:\n- go [direction]: Move (north, south, east, west, up, down)\n- take [item]: Pick up an item\n- use [item]: Use an item\n- look: Examine surroundings\n- inventory: Check inventory\n- help: Show this message\n- talk [npc]: Speak with an NPC",
     "inventoryEmptyMessage": "Your inventory is empty.",
