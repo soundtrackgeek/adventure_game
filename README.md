@@ -98,7 +98,7 @@ The game includes an automatic mini-map generation feature that:
 - Automatically layouts rooms based on their connections
 
 The map layout is generated using a force-directed algorithm that:
-- Places rooms based on their exit directions (north, south, east, west)
+- Places rooms based on their exit directions (north, south, east, west, up, down)
 - Maintains consistent spatial relationships between rooms
 - Starts from the room specified in config.json's "startingRoom"
 - Adjusts room positions to avoid overlapping
