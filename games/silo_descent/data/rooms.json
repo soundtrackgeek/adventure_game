@@ -4,114 +4,130 @@
     "exits": { "north": "commandCenter", "east": "dormitory", "down": "maintenanceShaft" },
     "items": ["oldJournal"],
     "npcs": ["oldWarden"],
-    "narrationAudio": "assets/sounds/narration/entryHall.mp3",
-    "image": "assets/images/entryHall.jpg"
+    "narrationAudio": "assets/sounds/narration/entryHall.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go north", "go east", "go down", "take oldJournal", "talk oldWarden", "look"]
   },
   "commandCenter": {
     "description": "This central hub is littered with defunct monitors, rusted control panels, and scattered logbooks. Decisions that once shaped the silo’s fate were made here.",
     "exits": { "south": "entryHall", "north": "controlRoom", "east": "engineRoom" },
     "items": ["siloMap", "hackingModule"],
     "npcs": ["mechanic"],
-    "narrationAudio": "assets/sounds/narration/commandCenter.mp3",
-    "image": "assets/images/commandCenter.jpg"
+    "narrationAudio": "assets/sounds/narration/commandCenter.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go south", "go north", "go east", "take siloMap", "take hackingModule", "talk mechanic", "look"]
   },
   "controlRoom": {
     "description": "Flickering screens display cryptic log entries and arcane schematics. The room hums with eerie energy as if the very walls remember lost commands.",
     "exits": { "south": "commandCenter", "up": "observationDeck" },
     "items": ["wornAccessCard"],
-    "narrationAudio": "assets/sounds/narration/controlRoom.mp3",
-    "image": "assets/images/controlRoom.jpg"
+    "narrationAudio": "assets/sounds/narration/controlRoom.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go south", "go up", "take wornAccessCard", "look"]
   },
   "observationDeck": {
     "description": "High above the silo’s lower levels, shattered glass windows offer a grim view of the desolate world beyond. A cold wind whispers forgotten secrets.",
     "exits": { "down": "controlRoom" },
     "items": ["encryptedDataChip"],
-    "narrationAudio": "assets/sounds/narration/observationDeck.mp3",
-    "image": "assets/images/observationDeck.jpg"
+    "narrationAudio": "assets/sounds/narration/observationDeck.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go down", "take encryptedDataChip", "look"]
   },
   "engineRoom": {
     "description": "The roar of ancient machinery and the clatter of falling pipes fill this cavernous space. Every step echoes with the threat of crushing metal.",
     "exits": { "west": "commandCenter", "down": "storageBay" },
     "items": ["crowbar"],
-    "narrationAudio": "assets/sounds/narration/engineRoom.mp3",
-    "image": "assets/images/engineRoom.jpg"
+    "narrationAudio": "assets/sounds/narration/engineRoom.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go west", "go down", "take crowbar", "look"]
   },
   "storageBay": {
     "description": "Dusty crates and tangled wires crowd this abandoned room. Forgotten equipment lies strewn about, as if time itself abandoned hope here.",
     "exits": { "up": "engineRoom", "east": "supplyRoom" },
     "items": ["nanotechRepairKit"],
-    "narrationAudio": "assets/sounds/narration/storageBay.mp3",
-    "image": "assets/images/storageBay.jpg"
+    "narrationAudio": "assets/sounds/narration/storageBay.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go up", "go east", "take nanotechRepairKit", "look"]
   },
   "supplyRoom": {
     "description": "Rows of rusted shelves hold expired supplies and parts of a once-thriving system. Amid decay, you sense remnants of purpose.",
     "exits": { "west": "storageBay", "north": "medBay" },
     "items": ["waterFilter", "antidote"],
-    "narrationAudio": "assets/sounds/narration/supplyRoom.mp3",
-    "image": "assets/images/supplyRoom.jpg"
+    "narrationAudio": "assets/sounds/narration/supplyRoom.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go west", "go north", "take waterFilter", "take antidote", "look"]
   },
   "medBay": {
     "description": "An infirmary long abandoned, with faded medical posters and scattered vials. A faint antiseptic odor lingers, betraying bygone care.",
     "exits": { "south": "supplyRoom", "east": "researchLab" },
     "items": ["syringeOfSerum"],
-    "narrationAudio": "assets/sounds/narration/medBay.mp3",
-    "image": "assets/images/medBay.jpg"
+    "narrationAudio": "assets/sounds/narration/medBay.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go south", "go east", "take syringeOfSerum", "look"]
   },
   "researchLab": {
     "description": "In this secretive laboratory, chaotic experiments have left bitter chemical stains and shattered glass. The air vibrates with the ghosts of discovery.",
     "exits": { "west": "medBay", "north": "botanicalLab" },
     "items": ["smartGlasses"],
-    "narrationAudio": "assets/sounds/narration/researchLab.mp3",
-    "image": "assets/images/researchLab.jpg"
+    "narrationAudio": "assets/sounds/narration/researchLab.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go west", "go north", "take smartGlasses", "look"]
   },
   "botanicalLab": {
     "description": "Mutated flora and tangled vines entangle the remnants of scientific equipment. Nature has reclaimed this space in a wild, unpredictable manner.",
     "exits": { "south": "researchLab", "east": "agriDome" },
     "items": ["herbalElixir"],
-    "narrationAudio": "assets/sounds/narration/botanicalLab.mp3",
-    "image": "assets/images/botanicalLab.jpg"
+    "narrationAudio": "assets/sounds/narration/botanicalLab.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go south", "go east", "take herbalElixir", "look"]
   },
   "agriDome": {
     "description": "Under a fractured dome of artificial light, enormous, mutated crops struggle for survival. The atmosphere is humid and filled with an earthy musk.",
     "exits": { "west": "botanicalLab", "north": "cafeteria" },
     "items": ["seedBundle"],
-    "narrationAudio": "assets/sounds/narration/agriDome.mp3",
-    "image": "assets/images/agriDome.jpg"
+    "narrationAudio": "assets/sounds/narration/agriDome.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go west", "go north", "take seedBundle", "look"]
   },
   "cafeteria": {
     "description": "Rows of rusted metal tables and flickering overhead lamps create an eerie dining hall. Once filled with laughter and chatter, it now echoes with silence.",
     "exits": { "south": "agriDome", "east": "diningHall" },
     "items": ["energyBar"],
-    "narrationAudio": "assets/sounds/narration/cafeteria.mp3",
-    "image": "assets/images/cafeteria.jpg"
+    "narrationAudio": "assets/sounds/narration/cafeteria.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go south", "go east", "take energyBar", "look"]
   },
   "diningHall": {
     "description": "A long, grand table dominates this hall with faded luxury. The deserted chairs bear silent witness to past camaraderie and despair.",
     "exits": { "west": "cafeteria", "north": "dormitory" },
     "items": [],
-    "narrationAudio": "assets/sounds/narration/diningHall.mp3",
-    "image": "assets/images/diningHall.jpg"
+    "narrationAudio": "assets/sounds/narration/diningHall.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go west", "go north", "look"]
   },
   "dormitory": {
     "description": "Rows of decrepit sleeping pods and peeling murals in this once-safe haven now evoke deep longing and harrowing loss.",
     "exits": { "south": "diningHall", "west": "entryHall", "east": "securityStation" },
     "items": [],
-    "narrationAudio": "assets/sounds/narration/dormitory.mp3",
-    "image": "assets/images/dormitory.jpg"
+    "narrationAudio": "assets/sounds/narration/dormitory.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go south", "go west", "go east", "look"]
   },
   "securityStation": {
     "description": "A cramped office with malfunctioning cameras and dusty monitors. Every surface whispers a caution as dark secrets lurk in the shadows.",
     "exits": { "west": "dormitory", "down": "recyclingBay" },
     "items": ["maintenanceBadge"],
-    "narrationAudio": "assets/sounds/narration/securityStation.mp3",
-    "image": "assets/images/securityStation.jpg"
+    "narrationAudio": "assets/sounds/narration/securityStation.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go west", "go down", "take maintenanceBadge", "look"]
   },
   "maintenanceShaft": {
     "description": "A narrow, claustrophobic passage beneath the entry hall with sporadic emergency lights, where every step could trigger unforeseen doom.",
     "exits": { "up": "entryHall" },
     "items": [],
-    "narrationAudio": "assets/sounds/narration/maintenanceShaft.mp3",
-    "image": "assets/images/maintenanceShaft.jpg",
+    "narrationAudio": "assets/sounds/narration/maintenanceShaft.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go up", "look"],
     "deathMessages": {
       "up": "The shaft’s unstable structure collapses as you attempt to climb, sealing your fate."
     }
@@ -120,8 +136,9 @@
     "description": "A grim maze of discarded parts and corroded machinery. The relentless clatter of moving metal serves as a constant reminder of danger.",
     "exits": { "up": "securityStation" },
     "items": ["liftKey"],
-    "narrationAudio": "assets/sounds/narration/recyclingBay.mp3",
-    "image": "assets/images/recyclingBay.jpg",
+    "narrationAudio": "assets/sounds/narration/recyclingBay.wav",
+    "image": "assets/images/entryHall.jpg",
+    "choices": ["go up", "take liftKey", "look"],
     "deathMessages": {
       "up": "A misstep on the slick, broken floor sends you tumbling into a vat of molten debris."
     }
