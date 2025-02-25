@@ -3,6 +3,8 @@ import os
 import json
 import urllib.parse  # added for URL parsing
 import signal
+import sys
+import threading
 
 class CORSRequestHandler(SimpleHTTPRequestHandler):
     def end_headers(self):
@@ -78,24 +80,34 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
                 
         return SimpleHTTPRequestHandler.do_GET(self)
 
-def signal_handler(sig, frame):
-    print('\nShutting down server gracefully...')
-    httpd.shutdown()
-    httpd.server_close()
-    exit(0)
+def shutdown_handler(sig, frame):
+    """Handle shutdown signals properly"""
+    print("Shutting down server gracefully...")
+    
+    # Close any open sockets or connections
+    if hasattr(httpd, 'socket'):
+        httpd.socket.close()
+    
+    # Stop any running threads that might be blocking
+    for thread in threading.enumerate():
+        if thread != threading.current_thread():
+            # For daemon threads, we can just let them be
+            if not thread.daemon and hasattr(thread, 'stop'):
+                thread.stop()
+    
+    # Exit explicitly
+    sys.exit(0)
 
 if __name__ == '__main__':
     server_address = ('', 8000)
     httpd = HTTPServer(server_address, CORSRequestHandler)
     
     # Set up signal handler for graceful shutdown
-    signal.signal(signal.SIGINT, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
+    signal.signal(signal.SIGINT, shutdown_handler)
+    signal.signal(signal.SIGTERM, shutdown_handler)
     
     print('Server running on port 8000... (Press Ctrl+C to quit)')
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
-        print('\nShutting down server gracefully...')
-        httpd.shutdown()
-        httpd.server_close()
+        shutdown_handler(signal.SIGINT, None)
